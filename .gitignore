@@ -1,0 +1,4 @@
+config/
+resource-bundles/
+*.sublime-*
+retrieve.properties
