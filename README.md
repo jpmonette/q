@@ -1,4 +1,4 @@
-# soql
+# Project Q
 A dynamic SOQL query generator
 
 > ***WARNING:*** Both the documentation and the package itself is under heavy
