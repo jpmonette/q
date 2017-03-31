@@ -9,6 +9,42 @@ A Dynamic [SOQL Query](https://developer.salesforce.com/docs/atlas.en-us.soql_so
 > it comes with absolutely no warranty at all. Feel free to browse or even
 > contribute to it :)
 
+## Installation
+
+Deploy the Apex classes from the `./src/classes/` repository into your Salesforce project.
+
+## Usage
+
+```java
+Q query =
+	new Q(Account.SObjectType)
+		.selectFields(SObjectType.Account.fieldSets.Example)
+		.addSubquery(new Q('Contacts'))
+		.add(Q.condition('Name').isLike('%Acme%'))
+		.add(Q.condition('BillingCountry').isNotNull())
+		.addLimit(5);
+
+System.debug(query.toSOQL());
+// SELECT CreatedById, Description, Owner.Email, (SELECT Id FROM Contacts) FROM Account WHERE Name LIKE '%Acme%' AND BillingCountry != null LIMIT 5
+```
+
+While chaining methods can be convenient, you can also build more complex queries depending on your use case.
+
+```java
+Q query = new Q(Contact.SObjectType).addLimit(5);
+
+if (String.isNotBlank(firstName)) {
+	query.add(Q.condition('FirstName').equals(firstName))
+}
+
+if (String.isNotBlank(lastName)) {
+	query.add(Q.condition('LastName').equals(lastName))
+}
+
+System.debug(query.toSOQL());
+// SELECT Id FROM Contact WHERE FirstName = 'Céline' AND LastName = 'Dion' LIMIT 5
+```
+
 ## Roadmap
 
 This library is being initially developed for one of my internal project,
