@@ -12,7 +12,6 @@ public class Q {
 	private static final String ASCENDING = 'ASC';
 	private static final String DESCENDING = 'DESC';
 
-	public Q() 						{}
 	public Q(SObjectType fromType)	{ this.fromText = String.valueOf(fromType); }
 	public Q(String fromText) 		{ this.fromText = fromText; }
 
