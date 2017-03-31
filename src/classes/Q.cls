@@ -5,12 +5,9 @@ public class Q {
 	private Integer numberOfRowsToSkip;
 
 	private Set<String> fieldList = new Set<String>();
-	private List<OrderBy> orders = new List<OrderBy>();
-	private List<Condition> conditions = new List<Condition>();
+	private List<QOrder> orders = new List<QOrder>();
+	private List<QCondition> conditions = new List<QCondition>();
 	private List<Q> subQueries = new List<Q>();
-
-	private static final String ASCENDING = 'ASC';
-	private static final String DESCENDING = 'DESC';
 
 	public Q() 						{}
 	public Q(SObjectType fromType)	{ this.fromText = String.valueOf(fromType); }
@@ -19,23 +16,23 @@ public class Q {
 	/**
 	 * Instantiate an OrderBy object
 	 */
-	public static OrderBy orderBy(String fieldName) {
-		OrderBy od = new OrderBy(fieldName);
+	public static QOrder orderBy(String fieldName) {
+		QOrder od = new QOrder(fieldName);
 		return od;
 	}
 
 	/**
 	 * Instantiate a Condition object
 	 */
-	public static Condition condition(String fieldName) {
-		Condition cond = new Condition(fieldName);
+	public static QCondition condition(String fieldName) {
+		QCondition cond = new QCondition(fieldName);
 		return cond;
 	}
 
 	/**
 	 * Add an OrderBy statement
 	 */
-	public Q add(OrderBy ob) {
+	public Q add(QOrder ob) {
 		this.orders.add(ob);
 		return this;
 	}
@@ -43,7 +40,7 @@ public class Q {
 	/**
 	 * Add a Condition statement
 	 */
-	public Q add(Condition cnd) {
+	public Q add(QCondition cnd) {
 		this.conditions.add(cnd);
 		return this;
 	}
@@ -103,7 +100,7 @@ public class Q {
 		// Order
 		List<String> orderList = new List<String>();
 
-		for (OrderBy order : this.orders) {
+		for (QOrder order : this.orders) {
 			orderList.add(order.build());
 		}
 
@@ -114,7 +111,7 @@ public class Q {
 		// Conditions
 		List<String> condList = new List<String>();
 
-		for (Condition cond : this.conditions) {
+		for (QCondition cond : this.conditions) {
 			condList.add(cond.build());
 		}
 
@@ -131,81 +128,6 @@ public class Q {
 		}
 
 		return query;
-	}
-
-	public class OrderBy {
-
-		private String field;
-		private String orderText = ASCENDING;
-		private String nullsOrder = '';
-
-		public OrderBy(String field) {
-			this.field = field;
-		}
-
-		public OrderBy ascending() {
-			this.orderText = ASCENDING;
-			return this;
-		}
-
-		public OrderBy descending() {
-			this.orderText = DESCENDING;
-			return this;
-		}
-
-		public OrderBy nullsFirst() {
-			this.nullsOrder = ' NULLS FIRST';
-			return this;
-		}
-
-		public OrderBy nullsLast() {
-			this.nullsOrder = ' NULLS LAST';
-			return this;
-		}
-
-		public String build() {
-			return field + ' ' + orderText + nullsOrder;
-		}
-	}
-
-	public class Condition {
-
-		private String field {
-			private get;
-			private set { field = String.escapeSingleQuotes(value); }
-		}
-		private String value {
-			private get;
-			private set { field = String.escapeSingleQuotes(value); }
-		}
-		private Boolean isNotNull = false;
-		private Boolean isLike = false;
-
-		public Condition(String field) {
-			this.field = field;
-		}
-
-		public Condition isNotNull() {
-			this.isNotNull = true;
-			return this;
-		}
-
-		public Condition isLike(String value) {
-			this.value = value;
-			this.isLike = true;
-			return this;
-		}
-
-		public String build() {
-			if (isNotNull) {
-				return field + ' != null';
-			} else if (isLike) {
-				return field + ' LIKE \'' + value + '\'';
-			} else {
-				return '';
-			}
-		}
-
 	}
 
 }
