@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <project xmlns:sf="antlib:com.salesforce" default="sf" basedir=".">
+  <taskdef uri="antlib:com.salesforce" resource="com/salesforce/antlib.xml" classpath="lib/ant-salesforce.jar"/>
+
+  <path id="ant.additions.classpath">
+      <fileset dir="./lib/" includes="*.jar"/>
+  </path>
+
+  <target name="retrieve">
+    <property file="retrieve.properties" />
+    <echo>Removing existing metadata from src directory...</echo>
+    <delete includeemptydirs="true" quiet="false">
+      <fileset dir=".">
+        <include name="src/**" />
+        <exclude name="src/package.xml" />
+      </fileset>
+    </delete>
+    <echo>Retrieving metadata from sandbox with user ${sf.username}...</echo>
+    <sf:retrieve
+      username="${sf.username}"
+      password="${sf.password}"
+      serverurl="${sf.serverurl}"
+      maxPoll="${sf.maxPoll}"
+      retrieveTarget="src"
+      unpackaged="src/package.xml" />
+  </target>
+
+  <target name="build">
+    <property environment="env" />
+    <property file="build.properties" />
+    <echo>Continuous Integration Build</echo>
+    <echo>${build.cmd}</echo>
+    <antcall target="${build.cmd}" />
+  </target>
+  
+  <target name="validate">
+    <echo>Validate and run local tests in Org with username: ${sf.username}</echo>
+    <taskdef
+        name="deployWithXmlReport"
+        classname="com.salesforce.ant.DeployWithXmlReportTask"
+        classpathref="ant.additions.classpath" />
+    <deployWithXmlReport
+        username="${sf.username}"
+        password="${sf.password}"
+        serverurl="${sf.serverurl}"
+        maxPoll="${sf.maxPoll}"
+        deployRoot="src"
+        testLevel="RunLocalTests"
+        junitreportdir="${build.junitreportdir}"
+        pollWaitMillis="${sf.pollWaitMillis}"
+        checkOnly="true" />
+  </target>
+  
+  <target name="deployAndRunAllTests">
+    <echo>Deploy and RunAllTests in Org with username: ${sf.username}</echo>
+    <sf:deploy
+      username="${sf.username}"
+      password="${sf.password}"
+      serverurl="${sf.serverurl}"
+      maxPoll="${sf.maxPoll}"
+      deployRoot="${user.dir}/src"
+      testLevel="${sf.testLevel}" />
+  </target>
+
+  <!-- Retrieve the information of all items of a particular metadata type -->
+  <target name="listMetadata">
+    <property file="retrieve.properties" />
+    <sf:listMetadata
+      username="${sf.username}"
+      password="${sf.password}"
+      serverurl="${sf.serverurl}"
+      metadataType="${sf.metadataType}"
+      resultFilePath="metadataList.log" />
+  </target>
+
+  <!-- Retrieve the information on all supported metadata type -->
+  <target name="describeMetadata">
+    <property file="retrieve.properties" />
+    <sf:describeMetadata
+      username="${sf.username}"
+      password="${sf.password}"
+      serverurl="${sf.serverurl}" />
+  </target>
+
+</project>

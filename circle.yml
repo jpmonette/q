@@ -1,0 +1,7 @@
+machine:
+  java:
+    version: oraclejdk8
+test:
+  override:
+    - ant -lib lib/ build: 
+        timeout: 600
