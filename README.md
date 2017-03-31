@@ -16,29 +16,28 @@ Deploy the Apex classes from the `./src/classes/` repository into your Salesforc
 ## Usage
 
 ```java
-Q query =
-	new Q(Account.SObjectType)
-		.selectFields(SObjectType.Account.fieldSets.Example)
-		.addSubquery(new Q('Contacts'))
-		.add(Q.condition('Name').isLike('%Acme%'))
-		.add(Q.condition('BillingCountry').isNotNull())
-		.addLimit(5);
+Q query = new Q(Account.SObjectType)
+    .selectFields(SObjectType.Account.fieldSets.Example)
+    .addSubquery(new Q('Contacts'))
+    .add(Q.condition('Name').isLike('%Acme%'))
+    .add(Q.condition('BillingCountry').isNotNull())
+    .addLimit(5);
 
 System.debug(query.toSOQL());
 // SELECT CreatedById, Description, Owner.Email, (SELECT Id FROM Contacts) FROM Account WHERE Name LIKE '%Acme%' AND BillingCountry != null LIMIT 5
 ```
 
-While chaining methods can be convenient, you can also build more complex queries depending on your use case.
+While chaining methods is a convenient way to initialise your query, you also have the ability to manually build complex queries depending on specific conditions.
 
 ```java
 Q query = new Q(Contact.SObjectType).addLimit(5);
 
 if (String.isNotBlank(firstName)) {
-	query.add(Q.condition('FirstName').equals(firstName))
+  query.add(Q.condition('FirstName').equals(firstName))
 }
 
 if (String.isNotBlank(lastName)) {
-	query.add(Q.condition('LastName').equals(lastName))
+  query.add(Q.condition('LastName').equals(lastName))
 }
 
 System.debug(query.toSOQL());
