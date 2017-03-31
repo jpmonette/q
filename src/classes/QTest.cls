@@ -26,7 +26,7 @@ private class QTest {
 	static void it_should_generate_query_with_fieldset() {
 		String query = 
 			new Q(Account.SObjectType)
-				.selectFields(SObjectType.Account.FieldSets.jpmonette__Example)
+				.selectFields(SObjectType.Account.fieldSets.Example)
 				.toSOQL();
 
 		System.assertEquals('SELECT CreatedById, Description, Owner.Email FROM Account', query);

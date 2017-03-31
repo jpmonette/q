@@ -7,5 +7,9 @@
         <members>QTest</members>
         <name>ApexClass</name>
     </types>
+    <types>
+        <members>Account.Example</members>
+        <name>FieldSet</name>
+    </types>
     <version>39.0</version>
 </Package>
