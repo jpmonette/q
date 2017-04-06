@@ -23,7 +23,7 @@ Q query = new Q(Account.SObjectType)
     .add(Q.condition('BillingCountry').isNotNull())
     .addLimit(5);
 
-System.debug(query.toSOQL());
+System.debug(query.build());
 // SELECT CreatedById, Description, Owner.Email, (SELECT Id FROM Contacts) FROM Account WHERE Name LIKE '%Acme%' AND BillingCountry != null LIMIT 5
 ```
 
@@ -40,7 +40,7 @@ if (String.isNotBlank(lastName)) {
   query.add(Q.condition('LastName').equals(lastName))
 }
 
-System.debug(query.toSOQL());
+System.debug(query.build());
 // SELECT Id FROM Contact WHERE FirstName = 'Céline' AND LastName = 'Dion' LIMIT 5
 ```
 
