@@ -80,35 +80,24 @@ public class Q {
 	}
 
 	/**
-	 * Return SOQL Q
-	 * @return String
-	 * @access public
+	 * Build the SELECT statement
 	 */
-	public String toSOQL() {
-		String query = 'SELECT Id ';
-
+	public String buildSelect() {
 		for (Q qb : this.subQueries) {
-			this.fieldList.add('(' + qb.toSOQL() + ')');
+			this.fieldList.add('(' + qb.build() + ')');
 		}
 
 		if (!this.fieldList.isEmpty()) {
-			query = 'SELECT ' + String.join(new List<String>(this.fieldList), ', ') + ' ';
+			return 'SELECT ' + String.join(new List<String>(this.fieldList), ', ');
+		} else {
+			return 'SELECT Id';
 		}
+	}
 
-		query += 'FROM ' + this.fromText;
-
-		// Order
-		List<String> orderList = new List<String>();
-
-		for (QOrder order : this.orders) {
-			orderList.add(order.build());
-		}
-
-		if (!this.orders.isEmpty()) {
-			query += ' ORDER BY ' + String.join(orderList, ', ');
-		}
-
-		// Conditions
+	/**
+	 * Build the WHERE statement
+	 */
+	public String buildConditions() {
 		List<String> condList = new List<String>();
 
 		for (QCondition cond : this.conditions) {
@@ -116,18 +105,56 @@ public class Q {
 		}
 
 		if (!this.conditions.isEmpty()) {
-			query += ' WHERE ' + String.join(condList, ' AND ');
+			return 'WHERE ' + String.join(condList, ' AND ');
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Build the ORDER BY statement
+	 */
+	public String buildOrderBy() {
+		List<String> orderList = new List<String>();
+
+		for (QOrder order : this.orders) {
+			orderList.add(order.build());
+		}
+
+		if (!this.orders.isEmpty()) {
+			return 'ORDER BY ' + String.join(orderList, ', ');
+		} else {
+			return '';
+		}
+
+	}
+
+	/**
+	 * Build the SOQL query
+	 */
+	public String build() {
+		List<String> queryParts = new List<String>();
+
+		queryParts.add(this.buildSelect());
+		queryParts.add('FROM ' + this.fromText);
+
+		if (!this.conditions.isEmpty()) {
+			queryParts.add(this.buildConditions());
+		}
+
+		if (!this.orders.isEmpty()) {
+			queryParts.add(this.buildOrderBy());
 		}
 
 		if (this.numberOfRows != null) {
-			query += ' LIMIT ' + this.numberOfRows;
+			queryParts.add('LIMIT ' + this.numberOfRows);
 		}
 
 		if (this.numberOfRowsToSkip != null) {
-			query += ' OFFSET ' + this.numberOfRowsToSkip;
+			queryParts.add('OFFSET ' + this.numberOfRowsToSkip);
 		}
 
-		return query;
+		return String.join(queryParts, ' ');
 	}
 
 }
