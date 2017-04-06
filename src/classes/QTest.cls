@@ -5,7 +5,7 @@ private class QTest {
 	static void it_should_generate_query() {
 		String query = 
 			new Q(Account.SObjectType)
-				.toSOQL();
+				.build();
 
 		System.assertEquals('SELECT Id FROM Account', query);
 		Database.query(query);
@@ -16,7 +16,7 @@ private class QTest {
 		String query = 
 			new Q(Account.SObjectType)
 				.addSubquery(new Q('Contacts'))
-				.toSOQL();
+				.build();
 
 		System.assertEquals('SELECT (SELECT Id FROM Contacts) FROM Account', query);
 		Database.query(query);
@@ -27,7 +27,7 @@ private class QTest {
 		String query = 
 			new Q(Account.SObjectType)
 				.selectFields(SObjectType.Account.fieldSets.Example)
-				.toSOQL();
+				.build();
 
 		System.assertEquals('SELECT CreatedById, Description, Owner.Email FROM Account', query);
 		Database.query(query);
@@ -39,7 +39,7 @@ private class QTest {
 			new Q(Account.SObjectType)
 				.add(Q.orderBy('Name').nullsLast())
 				.add(Q.orderBy('BillingCountry').descending())
-				.toSOQL();
+				.build();
 
 		System.assertEquals('SELECT Id FROM Account ORDER BY Name ASC NULLS LAST, BillingCountry DESC', query);
 		Database.query(query);
@@ -50,7 +50,7 @@ private class QTest {
 		String query =
 			new Q(Account.SObjectType)
 				.add(Q.condition('BillingCountry').isNotNull())
-				.toSOQL();
+				.build();
 
 		System.assertEquals('SELECT Id FROM Account WHERE BillingCountry != null', query);
 		Database.query(query);
@@ -61,7 +61,7 @@ private class QTest {
 		String query =
 			new Q(Account.SObjectType)
 				.add(Q.condition('Name').isLike('%Acme%'))
-				.toSOQL();
+				.build();
 
 		System.assertEquals('SELECT Id FROM Account WHERE Name LIKE \'%Acme%\'', query);
 		Database.query(query);
@@ -72,7 +72,7 @@ private class QTest {
 		String query =
 			new Q(Account.SObjectType)
 				.addLimit(5)
-				.toSOQL();
+				.build();
 
 		System.assertEquals('SELECT Id FROM Account LIMIT 5', query);
 		Database.query(query);
@@ -83,7 +83,7 @@ private class QTest {
 		String query =
 			new Q(Account.SObjectType)
 				.addOffset(5)
-				.toSOQL();
+				.build();
 
 		System.assertEquals('SELECT Id FROM Account OFFSET 5', query);
 		Database.query(query);
