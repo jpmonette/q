@@ -2,6 +2,7 @@
 A Dynamic [SOQL Query](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_sosl_intro.htm) Builder for the [Force.com Platform](https://developer.salesforce.com/docs/atlas.en-us.fundamentals.meta/fundamentals/adg_preface.htm)
 
   [![CircleCI Build Status](https://circleci.com/gh/jpmonette/q.png?style=shield&circle-token=:circle-token)](https://circleci.com/gh/jpmonette/q)
+  [![Coverage Status](https://coveralls.io/repos/github/jpmonette/q/badge.svg?branch=master)](https://coveralls.io/github/jpmonette/q?branch=master)
 
 > ***WARNING:*** Both the documentation and the package itself is under heavy
 > development and in a very early stage. That means, this repo is full of
