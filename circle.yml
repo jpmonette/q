@@ -1,7 +1,13 @@
 machine:
   java:
     version: oraclejdk8
+  pre:
+    - npm install -g coveralls
+    - go get -u github.com/jpmonette/apexcov
 test:
   override:
     - ant -lib lib/ build: 
         timeout: 600
+  post:
+    - apexcov --username="${CI_USERNAME}" --password="${CI_PASSWORD}"
+    - cat ./coverage/lcov.info | coveralls
