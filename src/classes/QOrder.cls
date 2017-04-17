@@ -1,37 +1,52 @@
 public class QOrder {
 
-	private static final String ASCENDING = 'ASC';
-	private static final String DESCENDING = 'DESC';
+	public enum SortOrder { ASCENDING, DESCENDING }
+	public enum NullsOrder { FIRST, LAST }
 
 	private String field;
-	private String orderText = ASCENDING;
-	private String nullsOrder = '';
+	private SortOrder sortValue;
+	private NullsOrder nullsValue;
 
 	public QOrder(String field) {
 		this.field = field;
+		this.sortValue = SortOrder.ASCENDING;
 	}
 
 	public QOrder ascending() {
-		this.orderText = ASCENDING;
+		this.sortValue = SortOrder.ASCENDING;
 		return this;
 	}
 
 	public QOrder descending() {
-		this.orderText = DESCENDING;
+		this.sortValue = SortOrder.DESCENDING;
 		return this;
 	}
 
 	public QOrder nullsFirst() {
-		this.nullsOrder = ' NULLS FIRST';
+		this.nullsValue = NullsOrder.FIRST;
 		return this;
 	}
 
 	public QOrder nullsLast() {
-		this.nullsOrder = ' NULLS LAST';
+		this.nullsValue = NullsOrder.LAST;
 		return this;
 	}
 
 	public String build() {
-		return field + ' ' + orderText + nullsOrder;
+		String orderString = field;
+
+		if (sortValue == SortOrder.ASCENDING) {
+			orderString += ' ASC';
+		} else {
+			orderString += ' DESC';
+		}
+
+		if (nullsValue != null && nullsValue == NullsOrder.FIRST) {
+			orderString += ' NULLS FIRST';
+		} else if (nullsValue != null && nullsValue == NullsOrder.LAST) {
+			orderString += ' NULLS LAST';
+		}
+
+		return orderString;
 	}
 }
