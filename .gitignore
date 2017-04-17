@@ -1,4 +1,5 @@
 config/
+node_modules/
 resource-bundles/
 *.sublime-*
 retrieve.properties
