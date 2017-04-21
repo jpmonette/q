@@ -3,6 +3,7 @@
     <types>
         <members>Q</members>
         <members>QCondition</members>
+        <members>QConditionTest</members>
         <members>QOrder</members>
         <members>QOrderTest</members>
         <members>QTest</members>
