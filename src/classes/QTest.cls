@@ -18,7 +18,7 @@ private class QTest {
 
 	@isTest
 	static void it_should_generate_query_with_sub_query() {
-		String query = 
+		String query =
 			new Q(Account.SObjectType)
 				.addSubquery(new Q('Contacts'))
 				.build();
@@ -29,7 +29,7 @@ private class QTest {
 
 	@isTest
 	static void it_should_generate_query_with_fieldset() {
-		String query = 
+		String query =
 			new Q(Account.SObjectType)
 				.selectFields(SObjectType.Account.fieldSets.Example)
 				.build();
