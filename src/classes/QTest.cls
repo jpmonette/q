@@ -7,7 +7,7 @@
 private class QTest {
 
 	@isTest
-	static void it_should_generate_query() {
+	static void testConstructor() {
 		String query =
 			new Q(Account.SObjectType)
 				.build();
@@ -17,7 +17,7 @@ private class QTest {
 	}
 
 	@isTest
-	static void it_should_generate_query_with_sub_query() {
+	static void testAddSubQuery() {
 		String query =
 			new Q(Account.SObjectType)
 				.addSubquery(new Q('Contacts'))
@@ -28,7 +28,7 @@ private class QTest {
 	}
 
 	@isTest
-	static void it_should_generate_query_with_fieldset() {
+	static void testSelectFields() {
 		String query =
 			new Q(Account.SObjectType)
 				.selectFields(SObjectType.Account.fieldSets.Example)
@@ -39,7 +39,7 @@ private class QTest {
 	}
 
 	@isTest
-	static void it_should_generate_query_with_multiple_order_by() {
+	static void testAddOrders() {
 		String query =
 			new Q(Account.SObjectType)
 				.add(Q.orderBy('Name').nullsLast())
@@ -51,7 +51,7 @@ private class QTest {
 	}
 
 	@isTest
-	static void it_should_generate_query_with_condition_is_not_null() {
+	static void testAddCondition1() {
 		String query =
 			new Q(Account.SObjectType)
 				.add(Q.condition('BillingCountry').isNotNull())
@@ -62,7 +62,7 @@ private class QTest {
 	}
 
 	@isTest
-	static void it_should_generate_query_with_condition_like() {
+	static void testAddCondition2() {
 		String query =
 			new Q(Account.SObjectType)
 				.add(Q.condition('Name').isLike('%Acme%'))
@@ -73,7 +73,7 @@ private class QTest {
 	}
 
 	@isTest
-	static void it_should_generate_query_with_limit() {
+	static void testAddLimit() {
 		String query =
 			new Q(Account.SObjectType)
 				.addLimit(5)
@@ -84,7 +84,7 @@ private class QTest {
 	}
 
 	@isTest
-	static void it_should_generate_query_with_offset() {
+	static void testAddOffset() {
 		String query =
 			new Q(Account.SObjectType)
 				.addOffset(5)
