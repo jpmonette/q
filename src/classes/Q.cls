@@ -1,3 +1,8 @@
+/**
+* Q is used to build SOQL statements
+* @author  Jean-Philippe Monette
+* @since   2017-03-21
+*/
 public class Q {
 
 	private String fromText;

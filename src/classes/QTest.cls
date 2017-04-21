@@ -1,9 +1,14 @@
+/**
+* QTest is used to test Q logic
+* @author  Jean-Philippe Monette
+* @since   2017-03-21
+*/
 @isTest
 private class QTest {
 
 	@isTest
 	static void it_should_generate_query() {
-		String query = 
+		String query =
 			new Q(Account.SObjectType)
 				.build();
 
