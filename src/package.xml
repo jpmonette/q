@@ -4,6 +4,7 @@
         <members>Q</members>
         <members>QCondition</members>
         <members>QOrder</members>
+        <members>QOrderTest</members>
         <members>QTest</members>
         <name>ApexClass</name>
     </types>
