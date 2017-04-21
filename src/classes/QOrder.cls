@@ -1,3 +1,8 @@
+/**
+* QOrder is used to build ORDER BY for SOQL statements
+* @author  Jean-Philippe Monette
+* @since   2017-03-31
+*/
 public class QOrder {
 
 	public enum SortOrder { ASCENDING, DESCENDING }
