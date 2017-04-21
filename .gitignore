@@ -1,5 +1,7 @@
 config/
+coverage/
 node_modules/
 resource-bundles/
+.coveralls.yml
 *.sublime-*
 retrieve.properties
