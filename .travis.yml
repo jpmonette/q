@@ -5,7 +5,9 @@ before_script:
 - npm install -g codeclimate-test-reporter
 - go get github.com/jpmonette/apexcov
 script:
+- ant -lib lib/ build
+after_script:
 - apexcov
-- cat./coverage/lcov.info
+- cat ./coverage/lcov.info
 - cat ./coverage/lcov.info | coveralls
 - codeclimate-test-reporter < ./coverage/lcov.info
