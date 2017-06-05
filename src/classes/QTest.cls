@@ -28,10 +28,21 @@ private class QTest {
 	}
 
 	@isTest
-	static void testSelectFields() {
+	static void testSelectFieldsUsingFieldSet() {
 		String query =
 			new Q(Account.SObjectType)
 				.selectFields(SObjectType.Account.fieldSets.Example)
+				.build();
+
+		System.assertEquals('SELECT CreatedById, Description, Owner.Email FROM Account', query);
+		Database.query(query);
+	}
+
+	@isTest
+	static void testSelectFieldsUsingSetString() {
+		String query =
+			new Q(Account.SObjectType)
+				.selectFields(new Set<String>{'CreatedById', 'Description', 'Owner.Email'})
 				.build();
 
 		System.assertEquals('SELECT CreatedById, Description, Owner.Email FROM Account', query);

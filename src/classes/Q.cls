@@ -14,7 +14,6 @@ public class Q {
 	private List<QCondition> conditions = new List<QCondition>();
 	private List<Q> subQueries = new List<Q>();
 
-	public Q() 						{}
 	public Q(SObjectType fromType)	{ this.fromText = String.valueOf(fromType); }
 	public Q(String fromText) 		{ this.fromText = fromText; }
 
@@ -59,11 +58,21 @@ public class Q {
 	}
 
 	/**
-	 * Add fields to the SELECT statement
+	 * Add fields to the SELECT statement from FieldSet
 	 */
 	public Q selectFields(Schema.FieldSet fs) {
 		for(Schema.FieldSetMember field : fs.getFields()) {
 			this.fieldList.add(field.getFieldPath());
+		}
+		return this;
+	}
+
+	/**
+	 * Add fields to the SELECT statement from Set of Strings
+	 */
+	public Q selectFields(Set<String> fields) {
+		for(String field : fields) {
+			this.fieldList.add(field);
 		}
 		return this;
 	}
