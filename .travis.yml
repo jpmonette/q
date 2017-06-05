@@ -1,12 +1,17 @@
 env:
-- GOPATH=$HOME/go PATH=$GOPATH/bin:$PATH
-before_script:
+- NODE_VERSION=7
+cache:
+  directories:
+  - node_modules
+install:
+- nvm install $NODE_VERSION
 - npm install -g coveralls
 - npm install -g codeclimate-test-reporter
-- go get github.com/jpmonette/apexcov
+- npm install -g jpmonette/apexcov-ts
 script:
 - ant -lib lib/ build
 after_script:
+- nvm use $NODE_VERSION
 - apexcov
 - cat ./coverage/lcov.info
 - cat ./coverage/lcov.info | coveralls
