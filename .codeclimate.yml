@@ -1,6 +1,9 @@
 engines:
   apexmetrics:
     enabled: true
+    checks:
+      StdCyclomaticComplexity:
+        enabled: false
 ratings:
   paths:
     - "**.cls"
