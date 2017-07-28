@@ -14,7 +14,7 @@ A Dynamic [SOQL Query](https://developer.salesforce.com/docs/atlas.en-us.soql_so
 
 ## Installation
 
-Deploy the Apex classes from the `./src/classes/` repository into your Salesforce project.
+Deploy the Apex classes from the `./force-app/main/default/classes/` repository into your Salesforce project.
 
 ## Usage
 
