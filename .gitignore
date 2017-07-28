@@ -1,3 +1,4 @@
+.sfdx/
 coverage/
 node_modules/
 resource-bundles/
