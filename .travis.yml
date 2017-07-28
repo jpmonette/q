@@ -14,18 +14,17 @@ env:
 before_script:
 - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
 - chmod +x ./cc-test-reporter
-- wget -qO- https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz | tar -xvJf -
+- wget -qO- https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz | tar -xJf -
 - ./sfdx/install
 - echo force://$CLIENT_ID:$CLIENT_SECRET:$REFRESH_TOKEN@$INSTANCE_URL > .sfdx-url
-- sfdx force:auth:sfdxurl:store -s -f ./.sfdx-url -a DefaultOrg
+- sfdx force:auth:sfdxurl:store --setdefaultusername --sfdxurlfile ./.sfdx-url --setalias DefaultOrg
 - npm install apexcov -g
 
 script:
-- sfdx force:org:create -s -f scratchdef.json -a ci
-- sfdx force:source:push -u ci
+- sfdx force:org:create --setdefaultusername --definitionfile scratchdef.json --setalias ci
+- sfdx force:source:push --targetusername ci
 - mkdir coverage
-- sfdx force:apex:test:run -r json -u ci -c > coverage/coverage.json
-- cat coverage/coverage.json
+- sfdx force:apex:test:run --codecoverage --resultformat json --targetusername ci > coverage/coverage.json
 - apexcov
-- sfdx force:org:delete -u ci -p
+- sfdx force:org:delete --noprompt --targetusername ci
 - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
