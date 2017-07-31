@@ -10,15 +10,18 @@ env:
   - SFDX_AUTOUPDATE_DISABLE=true
   - SFDX_DOMAIN_RETRY=300
   - SFDX_USE_GENERIC_UNIX_KEYCHAIN=true
+  - SFDX_URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
 
 before_script:
+- npm install apexcov -g
 - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
 - chmod +x ./cc-test-reporter
-- wget -qO- https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz | tar -xJf -
-- ./sfdx/install
+- wget -qO- $SFDX_URL | tar xJf -
+- "./sfdx/install"
+- export PATH=./sfdx/$(pwd):$PATH
+- sfdx update
 - echo force://$CLIENT_ID:$CLIENT_SECRET:$REFRESH_TOKEN@$INSTANCE_URL > .sfdx-url
-- sfdx force:auth:sfdxurl:store --setdefaultusername --sfdxurlfile ./.sfdx-url --setalias DefaultOrg
-- npm install apexcov -g
+- sfdx force:auth:sfdxurl:store --setdefaultdevhubusername --sfdxurlfile ./.sfdx-url --setalias DefaultOrg
 
 script:
 - sfdx force:org:create --setdefaultusername --definitionfile scratchdef.json --setalias ci
