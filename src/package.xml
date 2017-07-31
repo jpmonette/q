@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Q</members>
+        <members>QCondition</members>
+        <members>QConditionTest</members>
+        <members>QOrder</members>
+        <members>QOrderTest</members>
+        <members>QTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>Account.Example</members>
+        <name>FieldSet</name>
+    </types>
+    <version>39.0</version>
+</Package>
