@@ -36,6 +36,9 @@ public class QCondition {
 		}
 		if (val instanceof String) {
 			return '\'' + String.escapeSingleQuotes((String) val) + '\'';
+		} else if (val instanceof Date) {
+			String dateString = String.valueOf(val);
+			return dateString.substring(0, dateString.indexOf(' '));
 		} else {
 			return val;
 		}
