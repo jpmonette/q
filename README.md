@@ -5,12 +5,6 @@ A Dynamic [SOQL Query](https://developer.salesforce.com/docs/atlas.en-us.soql_so
   [![Coverage Status](https://coveralls.io/repos/github/jpmonette/q/badge.svg?branch=master)](https://coveralls.io/github/jpmonette/q?branch=master)
   [![Code Climate](https://codeclimate.com/github/jpmonette/q/badges/gpa.svg)](https://codeclimate.com/github/jpmonette/q)
 
-> ***WARNING:*** Both the documentation and the package itself is under heavy
-> development and in a very early stage. That means, this repo is full of
-> untested code and the API can break without any further notice. Therefore,
-> it comes with absolutely no warranty at all. Feel free to browse or even
-> contribute to it :)
-
 ## Installation
 
 Deploy the Apex classes from the `./force-app/main/default/classes/` repository into your Salesforce project.
