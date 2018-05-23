@@ -35,11 +35,11 @@ While chaining methods is a convenient way to initialise your query, you also ha
 Q query = new Q(Contact.SObjectType).addLimit(5);
 
 if (String.isNotBlank(firstName)) {
-  query.add(Q.condition('FirstName').equals(firstName))
+  query.add(Q.condition('FirstName').equalsTo(firstName))
 }
 
 if (String.isNotBlank(lastName)) {
-  query.add(Q.condition('LastName').equals(lastName))
+  query.add(Q.condition('LastName').equalsTo(lastName))
 }
 
 System.debug(query.build());
