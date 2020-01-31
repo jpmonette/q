@@ -5,29 +5,31 @@ cache:
   directories:
     - node_modules
 
-env:
-  global:
-  - SFDX_AUTOUPDATE_DISABLE=true
-  - SFDX_DOMAIN_RETRY=300
-  - SFDX_USE_GENERIC_UNIX_KEYCHAIN=true
-  - SFDX_URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
-
 before_script:
-- npm install apexcov -g
-- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-- chmod +x ./cc-test-reporter
-- wget -qO- $SFDX_URL | tar xJf -
-- "./sfdx/install"
-- export PATH=./sfdx/$(pwd):$PATH
-- sfdx update
-- echo force://$CLIENT_ID:$CLIENT_SECRET:$REFRESH_TOKEN@$INSTANCE_URL > .sfdx-url
-- sfdx force:auth:sfdxurl:store --setdefaultdevhubusername --sfdxurlfile ./.sfdx-url --setalias DefaultOrg
+  - export URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+  - export SFDX_AUTOUPDATE_DISABLE=false
+  - export SFDX_USE_GENERIC_UNIX_KEYCHAIN=true
+  - export SFDX_DOMAIN_RETRY=300
+  - export SFDX_DISABLE_APP_HUB=true
+  - export SFDX_LOG_LEVEL=DEBUG
+  - export SFDX_ALIAS=servier-ci-$TRAVIS_BUILD_NUMBER
+  - mkdir sfdx
+  - wget -qO- $URL | tar xJ -C sfdx --strip-components 1
+  - "./sfdx/install"
+  - export PATH=./sfdx/$(pwd):$PATH
+  - sfdx update
+  - sfdx --version
+  - sfdx plugins --core
+  - npm install apexcov coveralls -g
+  - echo force://$CLIENT_ID:$CLIENT_SECRET:$REFRESH_TOKEN@$INSTANCE_URL > .sfdx-url
+  - sfdx force:auth:sfdxurl:store --setdefaultdevhubusername --sfdxurlfile ./.sfdx-url --setalias DefaultOrg
+  - echo y | sfdx plugins:install @mavens/sfdx-commands
 
 script:
-- sfdx force:org:create --setdefaultusername --definitionfile scratchdef.json --setalias ci
-- sfdx force:source:push --targetusername ci
-- mkdir coverage
-- sfdx force:apex:test:run --codecoverage --resultformat json --targetusername ci > coverage/coverage.json
-- apexcov
-- sfdx force:org:delete --noprompt --targetusername ci
-- ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - sfdx force:org:create --setdefaultusername --definitionfile scratchdef.json --setalias ci
+  - sfdx force:source:push --targetusername ci
+  - mkdir coverage
+  - sfdx force:apex:test:run --codecoverage --testlevel=RunLocalTests --outputdir=coverage
+  - sfdx mavens:ci:lcov --targetusername ci
+  - sfdx force:org:delete --noprompt --targetusername ci
+  - cat ./coverage/lcov.info | coveralls
