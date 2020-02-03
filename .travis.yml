@@ -27,9 +27,9 @@ before_script:
 
 script:
   - sfdx force:org:create --setdefaultusername --definitionfile scratchdef.json --setalias ci
-  - sfdx force:source:push --targetusername ci
+  - sfdx force:source:push
   - mkdir coverage
-  - sfdx force:apex:test:run --codecoverage --testlevel=RunLocalTests --outputdir=coverage
-  - sfdx mavens:ci:lcov --targetusername ci
-  - sfdx force:org:delete --noprompt --targetusername ci
+  - sfdx force:apex:test:run --codecoverage --testlevel=RunLocalTests --resultformat=json --outputdir=coverage
+  - sfdx mavens:ci:lcov
+  - sfdx force:org:delete --noprompt
   - cat ./coverage/lcov.info | coveralls
