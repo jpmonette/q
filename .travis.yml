@@ -29,7 +29,7 @@ script:
   - sfdx force:org:create --setdefaultusername --definitionfile scratchdef.json --setalias ci
   - sfdx force:source:push
   - mkdir coverage
-  - sfdx force:apex:test:run --codecoverage --testlevel=RunLocalTests --resultformat=json --outputdir=coverage
+  - sfdx force:apex:test:run --codecoverage --testlevel=RunLocalTests --resultformat=human --outputdir=coverage
   - sfdx mavens:ci:lcov
   - sfdx force:org:delete --noprompt
   - cat ./coverage/lcov.info | coveralls
