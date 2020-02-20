@@ -27,7 +27,7 @@ public class QCondition implements QICondition {
 			List<String> values = new List<String>();
 			for (Object value : (List<Object>) val) {
 				if (value instanceof String) {
-					values.add('\'' + String.escapeSingleQuotes((String) value) + '\'');
+					values.add('\'' + escapeSoqlValue((String) value) + '\'');
 				} else {
 					values.add((String) value);
 				}
@@ -35,13 +35,17 @@ public class QCondition implements QICondition {
 			return String.join(values, ', ');
 		}
 		if (val instanceof String) {
-			return '\'' + String.escapeSingleQuotes((String) val) + '\'';
+			return '\'' + escapeSoqlValue((String) val) + '\'';
 		} else if (val instanceof Date) {
 			String dateString = String.valueOf(val);
 			return dateString.substring(0, dateString.indexOf(' '));
 		} else {
 			return val;
 		}
+	}
+
+	private String escapeSoqlValue(String value) {
+		return String.escapeSingleQuotes(value.replace('\\', '\\\\'));
 	}
 
 	public QCondition equalsTo(Object value) {
