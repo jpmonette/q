@@ -105,4 +105,28 @@ private class QTest {
 		Database.query(query);
 	}
 
+	@isTest
+	static void testGroupBy() {
+		String query =
+			new Q(Lead.SObjectType)
+        .selectFields(new Set<String>{'LeadSource', 'COUNT(Name)'})
+				.groupBy('LeadSource')
+				.build();
+
+		System.assertEquals('SELECT LeadSource, COUNT(Name) FROM Lead GROUP BY LeadSource', query);
+		Database.query(query);
+	}
+
+	@isTest
+	static void testGroupByMultiple() {
+		String query =
+			new Q(Lead.SObjectType)
+        .selectFields(new Set<String>{'Status', 'LeadSource', 'COUNT(Name)'})
+				.groupBy(new Set<String>{'Status', 'LeadSource'})
+				.build();
+
+		System.assertEquals('SELECT Status, LeadSource, COUNT(Name) FROM Lead GROUP BY Status, LeadSource', query);
+		Database.query(query);
+	}
+
 }
