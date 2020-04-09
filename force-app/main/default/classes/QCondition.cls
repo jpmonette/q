@@ -29,7 +29,7 @@ public class QCondition implements QICondition {
 				if (value instanceof String) {
 					values.add('\'' + escapeSoqlValue((String) value) + '\'');
 				} else {
-					values.add((String) value);
+					values.add(String.valueOf(value));
 				}
 			}
 			return String.join(values, ', ');
