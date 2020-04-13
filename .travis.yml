@@ -4,17 +4,13 @@ node_js: '8'
 cache: false
 
 before_install:
-  - export URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
   - export SFDX_AUTOUPDATE_DISABLE=false
   - export SFDX_USE_GENERIC_UNIX_KEYCHAIN=true
   - export SFDX_DOMAIN_RETRY=300
   - export SFDX_DISABLE_APP_HUB=true
   - export SFDX_LOG_LEVEL=DEBUG
   - export SFDX_IMPROVED_CODE_COVERAGE=true
-  - mkdir sfdx
-  - wget -qO- $URL | tar xJ -C sfdx --strip-components 1
-  - "./sfdx/install"
-  - export PATH=./sfdx/$(pwd):$PATH
+  - npm i -g sfdx-cli
   - sfdx update
   - sfdx --version
   - sfdx plugins --core
