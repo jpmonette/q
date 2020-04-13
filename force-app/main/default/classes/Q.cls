@@ -11,7 +11,7 @@ public class Q {
 
 	private Set<String> fieldList = new Set<String>();
 	private List<QOrder> orders = new List<QOrder>();
-	private List<QCondition> conditions = new List<QCondition>();
+	private List<QICondition> conditions = new List<QICondition>();
 	private List<Q> subQueries = new List<Q>();
 
 	public Q(SObjectType fromType)	{ this.fromText = String.valueOf(fromType); }
@@ -33,6 +33,21 @@ public class Q {
 		return cond;
 	}
 
+	/*
+	 * Instantiate a DateLiteral object
+	 */
+	public static QDateLiteral dateLiteral(QDateLiteral.Value literal) {
+		return dateLiteral(literal, null);
+	}
+
+	/*
+	 * Instantiate a DateLiteral object
+	 */
+	public static QDateLiteral dateLiteral(QDateLiteral.Value literal, Integer value) {
+		QDateLiteral dateLiteral = new QDateLiteral(literal, value);
+		return dateLiteral;
+	}
+
 	/**
 	 * Add an OrderBy statement
 	 */
@@ -44,7 +59,7 @@ public class Q {
 	/**
 	 * Add a Condition statement
 	 */
-	public Q add(QCondition cnd) {
+	public Q add(QICondition cnd) {
 		this.conditions.add(cnd);
 		return this;
 	}
@@ -94,6 +109,22 @@ public class Q {
 	}
 
 	/**
+     * Instantiate a parenthetical OR condition group
+     */
+    public static QConditionGroup orGroup() {
+        QOrGroup orGroup = new QOrGroup();
+        return orGroup;
+    }
+
+    /**
+     * Instantiate a parenthetical AND condition group
+     */
+    public static QConditionGroup andGroup() {
+        QAndGroup andGroup = new QAndGroup();
+        return andGroup;
+    }
+
+	/**
 	 * Build the SELECT statement
 	 */
 	public String buildSelect() {
@@ -114,7 +145,7 @@ public class Q {
 	public String buildConditions() {
 		List<String> condList = new List<String>();
 
-		for (QCondition cond : this.conditions) {
+		for (QICondition cond : this.conditions) {
 			condList.add(cond.build());
 		}
 
