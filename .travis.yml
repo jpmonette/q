@@ -22,10 +22,11 @@ before_install:
   - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key --username $USERNAME --setdefaultdevhubusername -a DevHub
   - echo y | sfdx plugins:install @mavens/sfdx-commands
 script:
-  - sfdx force:org:create --setdefaultusername --definitionfile scratchdef.json --setalias ci
-  - sfdx force:source:push
+  - sfdx force:org:create -v DevHub -s -f scratchdef.json -a ciorg --wait 2
+  - sfdx force:org:display -u ciorg
+  - sfdx force:source:push -u ciorg
   - mkdir coverage
-  - sfdx force:apex:test:run --codecoverage --testlevel=RunLocalTests --resultformat=human --outputdir=coverage
+  - sfdx force:apex:test:run -u ciorg --codecoverage --testlevel=RunLocalTests --resultformat=human --outputdir=coverage --wait 10
   - sfdx mavens:ci:lcov
-  - sfdx force:org:delete --noprompt
+  - sfdx force:org:delete -u ciorg -p
   - cat ./coverage/lcov.info | coveralls
