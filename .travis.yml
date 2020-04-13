@@ -18,7 +18,6 @@ before_install:
   - sfdx --version
   - sfdx plugins --core
   - npm install apexcov coveralls -g
-  - sudo service ntp restart
   - openssl aes-256-cbc -K $encrypted_79a2f6093848_key -iv $encrypted_79a2f6093848_iv -in assets/server.key.enc -out assets/server.key -d
   - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key --username $USERNAME --setdefaultdevhubusername -a DevHub
   - echo y | sfdx plugins:install @mavens/sfdx-commands
