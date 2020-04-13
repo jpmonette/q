@@ -22,7 +22,7 @@ before_install:
   - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key --username $USERNAME --setdefaultdevhubusername -a DevHub
   - echo y | sfdx plugins:install @mavens/sfdx-commands
 script:
-  - sfdx force:org:create -v DevHub -s -f scratchdef.json -a ciorg --wait 2
+  - sfdx force:org:create -v DevHub -s -f scratchdef.json -a ciorg
   - sfdx force:org:display -u ciorg
   - sfdx force:source:push -u ciorg
   - mkdir coverage
