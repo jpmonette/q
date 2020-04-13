@@ -10,6 +10,7 @@ public class Q {
 	private Integer numberOfRowsToSkip;
 
 	private Set<String> fieldList = new Set<String>();
+	private Set<String> groupBy = new Set<String>();
 	private List<QOrder> orders = new List<QOrder>();
 	private List<QICondition> conditions = new List<QICondition>();
 	private List<Q> subQueries = new List<Q>();
@@ -93,6 +94,22 @@ public class Q {
 	}
 
 	/**
+	 * Add a GROUP BY statement
+	 */
+	public Q groupBy(String fieldName) {
+		this.groupBy.add(fieldName);
+		return this;
+	}
+
+	/**
+	 * Add a GROUP BY statement
+	 */
+	public Q groupBy(Set<String> fieldNames) {
+		this.groupBy.addAll(fieldNames);
+		return this;
+	}
+
+	/**
 	 * Add a LIMIT statement
 	 */
 	public Q addLimit(Integer i) {
@@ -157,6 +174,17 @@ public class Q {
 	}
 
 	/**
+	 * Build the GROUP BY statement
+	 */
+	public String buildGroupBy() {
+		if (!this.groupBy.isEmpty()) {
+			return 'GROUP BY ' + String.join(new List<String>(this.groupBy), ', ');
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * Build the ORDER BY statement
 	 */
 	public String buildOrderBy() {
@@ -189,6 +217,10 @@ public class Q {
 
 		if (!this.orders.isEmpty()) {
 			queryParts.add(this.buildOrderBy());
+		}
+
+		if (!this.groupBy.isEmpty()) {
+			queryParts.add(this.buildGroupBy());
 		}
 
 		if (this.numberOfRows != null) {

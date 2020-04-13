@@ -106,55 +106,79 @@ private class QTest {
 	}
 
 	@isTest
-    static void testOrGroup() {
-        String query =
-            new Q(Account.SObjectType)
-                .add(Q.orGroup()
-                	.add(Q.condition('Name').equalsTo('test'))
-                	.add(Q.condition('Name').equalsTo('test'))
-            	)
-            	.build();
+	static void testGroupBy() {
+		String query =
+			new Q(Lead.SObjectType)
+        .selectFields(new Set<String>{'LeadSource', 'COUNT(Name)'})
+				.groupBy('LeadSource')
+				.build();
 
-        System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')', query);
-        Database.query(query);
+		System.assertEquals('SELECT LeadSource, COUNT(Name) FROM Lead GROUP BY LeadSource', query);
+		Database.query(query);
+	}
 
-        List<QCondition> conditions = new List<QCondition>();
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        QOrGroup sbOrGroup = new QOrGroup(conditions);
-        query =
-            new Q(Account.SObjectType)
-                .add(sbOrGroup)
-                .build();
+	@isTest
+	static void testGroupByMultiple() {
+		String query =
+			new Q(Lead.SObjectType)
+        .selectFields(new Set<String>{'Status', 'LeadSource', 'COUNT(Name)'})
+				.groupBy(new Set<String>{'Status', 'LeadSource'})
+				.build();
 
-        System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')', query);
-        Database.query(query);
-    }
+		System.assertEquals('SELECT Status, LeadSource, COUNT(Name) FROM Lead GROUP BY Status, LeadSource', query);
+		Database.query(query);
+	}
 
-    @isTest
-    static void testAndGroup() {
-        String query =
-            new Q(Account.SObjectType)
-                .add(Q.andGroup()
-                    .add(Q.condition('Name').equalsTo('test'))
-                    .add(Q.condition('Name').equalsTo('test'))
-                )
-                .build();
-
-        System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')', query);
-        Database.query(query);
-
-        List<QCondition> conditions = new List<QCondition>();
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        QAndGroup sbAndGroup = new QAndGroup(conditions);
-        query =
-            new Q(Account.SObjectType)
-                .add(sbAndGroup)
+  @isTest
+  static void testOrGroup() {
+      String query =
+          new Q(Account.SObjectType)
+              .add(Q.orGroup()
+                .add(Q.condition('Name').equalsTo('test'))
+                .add(Q.condition('Name').equalsTo('test'))
+            )
             .build();
 
-        System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')', query);
-        Database.query(query);
-    }
+      System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')', query);
+      Database.query(query);
+
+      List<QCondition> conditions = new List<QCondition>();
+      conditions.add(Q.condition('Name').equalsTo('test'));
+      conditions.add(Q.condition('Name').equalsTo('test'));
+      QOrGroup sbOrGroup = new QOrGroup(conditions);
+      query =
+          new Q(Account.SObjectType)
+              .add(sbOrGroup)
+              .build();
+
+      System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')', query);
+      Database.query(query);
+  }
+
+  @isTest
+  static void testAndGroup() {
+      String query =
+          new Q(Account.SObjectType)
+              .add(Q.andGroup()
+                  .add(Q.condition('Name').equalsTo('test'))
+                  .add(Q.condition('Name').equalsTo('test'))
+              )
+              .build();
+
+      System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')', query);
+      Database.query(query);
+
+      List<QCondition> conditions = new List<QCondition>();
+      conditions.add(Q.condition('Name').equalsTo('test'));
+      conditions.add(Q.condition('Name').equalsTo('test'));
+      QAndGroup sbAndGroup = new QAndGroup(conditions);
+      query =
+          new Q(Account.SObjectType)
+              .add(sbAndGroup)
+          .build();
+
+      System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')', query);
+      Database.query(query);
+  }
 
 }
