@@ -1,15 +1,9 @@
 # Project Q
 A Dynamic [SOQL Query](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_sosl_intro.htm) Builder for the [Force.com Platform](https://developer.salesforce.com/docs/atlas.en-us.fundamentals.meta/fundamentals/adg_preface.htm)
 
-  [![CircleCI Build Status](https://circleci.com/gh/jpmonette/q.png?style=shield&circle-token=:circle-token)](https://circleci.com/gh/jpmonette/q)
-  [![Coverage Status](https://coveralls.io/repos/github/jpmonette/q/badge.svg?branch=master)](https://coveralls.io/github/jpmonette/q?branch=master)
-  [![Code Climate](https://codeclimate.com/github/jpmonette/q/badges/gpa.svg)](https://codeclimate.com/github/jpmonette/q)
-
-> ***WARNING:*** Both the documentation and the package itself is under heavy
-> development and in a very early stage. That means, this repo is full of
-> untested code and the API can break without any further notice. Therefore,
-> it comes with absolutely no warranty at all. Feel free to browse or even
-> contribute to it :)
+ [![Build Status](https://travis-ci.com/fehays/q.svg?branch=master)](https://travis-ci.com/fehays/q)
+ [![Coverage Status](https://coveralls.io/repos/github/fehays/q/badge.svg?branch=master)](https://coveralls.io/github/fehays/q?branch=master)
+  [![Maintainability](https://api.codeclimate.com/v1/badges/bb48ebe88349e1272759/maintainability)](https://codeclimate.com/github/fehays/q/maintainability)
 
 ## Installation
 
@@ -35,11 +29,11 @@ While chaining methods is a convenient way to initialise your query, you also ha
 Q query = new Q(Contact.SObjectType).addLimit(5);
 
 if (String.isNotBlank(firstName)) {
-  query.add(Q.condition('FirstName').equals(firstName))
+  query.add(Q.condition('FirstName').equalsTo(firstName))
 }
 
 if (String.isNotBlank(lastName)) {
-  query.add(Q.condition('LastName').equals(lastName))
+  query.add(Q.condition('LastName').equalsTo(lastName))
 }
 
 System.debug(query.build());
