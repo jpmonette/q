@@ -3,7 +3,7 @@ A Dynamic [SOQL Query](https://developer.salesforce.com/docs/atlas.en-us.soql_so
 
  [![Build Status](https://travis-ci.com/fehays/q.svg?branch=master)](https://travis-ci.com/fehays/q)
  [![Coverage Status](https://coveralls.io/repos/github/fehays/q/badge.svg?branch=master)](https://coveralls.io/github/fehays/q?branch=master)
-  [![Code Climate](https://codeclimate.com/github/jpmonette/q/badges/gpa.svg)](https://codeclimate.com/github/jpmonette/q)
+  [![Maintainability](https://api.codeclimate.com/v1/badges/bb48ebe88349e1272759/maintainability)](https://codeclimate.com/github/fehays/q/maintainability)
 
 ## Installation
 
