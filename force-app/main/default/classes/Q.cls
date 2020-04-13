@@ -33,6 +33,21 @@ public class Q {
 		return cond;
 	}
 
+	/*
+	 * Instantiate a DateLiteral object
+	 */
+	public static QDateLiteral dateLiteral(QDateLiteral.Value literal) {
+		return dateLiteral(literal, null);
+	}
+
+	/*
+	 * Instantiate a DateLiteral object
+	 */
+	public static QDateLiteral dateLiteral(QDateLiteral.Value literal, Integer value) {
+		QDateLiteral dateLiteral = new QDateLiteral(literal, value);
+		return dateLiteral;
+	}
+
 	/**
 	 * Add an OrderBy statement
 	 */

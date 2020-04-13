@@ -39,7 +39,9 @@ public class QCondition implements QICondition {
 		} else if (val instanceof Date) {
 			String dateString = String.valueOf(val);
 			return dateString.substring(0, dateString.indexOf(' '));
-		} else {
+		} else if (val instanceof QDateLiteral) {
+			return ((QDateLiteral)val).buildLiteral();
+		}else {
 			return val;
 		}
 	}
