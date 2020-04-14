@@ -102,4 +102,26 @@ private class QConditionTest {
 		segment = new QCondition('CreatedDate').equalsTo(Q.dateLiteral(QDateLiteral.Value.YESTERDAY)).build();
 		System.assertEquals('CreatedDate = YESTERDAY', segment);
 	}
+
+	@isTest
+	static void testEmptyConditions() {
+		String query = new Q(Account.SObjectType).buildConditions();
+
+		System.assertEquals(null, query);
+	}
+
+	@isTest
+	static void testEmptyGroupBy() {
+		String query = new Q(Account.SObjectType).buildGroupBy();
+
+		System.assertEquals(null, query);
+	}
+
+	@isTest
+	static void testEmptyOrderBy() {
+		String query = new Q(Account.SObjectType).buildOrderBy();
+
+		System.assertEquals('', query);
+	}
+
 }
