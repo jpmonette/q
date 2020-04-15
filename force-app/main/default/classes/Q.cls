@@ -44,7 +44,7 @@ public class Q {
 	/**
 	 * Add a Condition statement
 	 */
-	public Q add(QICondition cnd) {
+	public Q add(QCondition cnd) {
 		this.conditions.add(cnd);
 		return this;
 	}

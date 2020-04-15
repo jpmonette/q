@@ -110,10 +110,10 @@ private class QTest {
         String query =
             new Q(Account.SObjectType)
                 .add(Q.orGroup()
-                	.add(Q.condition('Name').equalsTo('test'))
-                	.add(Q.condition('Name').equalsTo('test'))
-            	)
-            	.build();
+                .add(Q.condition('Name').equalsTo('test'))
+                .add(Q.condition('Name').equalsTo('test'))
+            )
+                .build();
 
         System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')', query);
         Database.query(query);

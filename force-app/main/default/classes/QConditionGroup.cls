@@ -41,7 +41,7 @@ public abstract class QConditionGroup implements QICondition {
 
         String value = '';
 
-        for (QICondition condition : conditions) {
+        for (QConditionGroup condition : conditions) {
             if (String.isNotEmpty(value))
                 value += ' ' + operatorMap.get(operator.name()) + ' ';
             value += condition.build();
