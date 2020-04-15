@@ -3,7 +3,7 @@
 * @author  Jean-Philippe Monette
 * @since   2017-03-21
 */
-public class QCondition implements QICondition {
+public class QCondition {
 
 	public enum ComparisonOperator { EQUALS, NOT_EQUALS, LESS_THAN, LESS_OR_EQUAL, GREATER_THAN, GREATER_OR_EQUAL, IS_LIKE, IS_IN, NOT_IN, INCLUDES, EXCLUDES }
 
