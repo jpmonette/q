@@ -105,4 +105,28 @@ private class QTest {
 		Database.query(query);
 	}
 
+	@isTest
+	static void testEscapedBackslash() {
+		// test when name contains single quote ' char.  E.g. - Acme's Carwash
+		String query =
+			new Q(Account.SObjectType)
+				.add(Q.condition('Name').equalsTo('Acme\'s Carwash'))
+				.build();
+
+		System.assertEquals('SELECT Id FROM Account WHERE Name = \'Acme\\\'s Carwash\'', query);
+		Database.query(query);
+	}
+
+	@isTest
+	static void testEscapedBackslash2() {
+		// test name contains backslash \ char.  E.g. - Acme\s Carwash
+		String query =
+			new Q(Account.SObjectType)
+				.add(Q.condition('Name').equalsTo('Acme\\s Carwash'))
+				.build();
+
+		System.assertEquals('SELECT Id FROM Account WHERE Name = \'Acme\\\\\\\\s Carwash\'', query);
+		Database.query(query);
+	}
+
 }
