@@ -139,22 +139,22 @@ public class QCondition {
 			return field + ' LIKE ' + fieldValue;
 		} else if (operatorValue.equals(ComparisonOperator.IS_IN)) {
 			if (fieldValue instanceOf QBindVariable) {
-				return field + ' IN ' + (QBindVariable)fieldValue;	
+				return field + ' IN ' + fieldValue;	
 			}
 			return field + ' IN (' + fieldValue + ')';
 		} else if (operatorValue.equals(ComparisonOperator.NOT_IN)) {
 			if (fieldValue instanceOf QBindVariable) {
-				return field + ' NOT IN ' + (QBindVariable)fieldValue;	
+				return field + ' NOT IN ' + fieldValue;	
 			}
 			return field + ' NOT IN (' + fieldValue + ')';
 		} else if (operatorValue.equals(ComparisonOperator.INCLUDES)) {
 			if (fieldValue instanceOf QBindVariable) {
-				return field + ' INCLUDES ' + (QBindVariable)fieldValue;	
+				return field + ' INCLUDES ' + fieldValue;	
 			}
 			return field + ' INCLUDES (' + fieldValue + ')';
 		} else if (operatorValue.equals(ComparisonOperator.EXCLUDES)) {
 			if (fieldValue instanceOf QBindVariable) {
-				return field + ' EXCLUDES ' + (QBindVariable)fieldValue;	
+				return field + ' EXCLUDES ' + fieldValue;	
 			}
 			return field + ' EXCLUDES (' + fieldValue + ')';
 		} else {
