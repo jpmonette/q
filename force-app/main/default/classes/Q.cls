@@ -10,8 +10,9 @@ public class Q {
 	private Integer numberOfRowsToSkip;
 
 	private Set<String> fieldList = new Set<String>();
+	private Set<String> groupBy = new Set<String>();
 	private List<QOrder> orders = new List<QOrder>();
-	private List<QCondition> conditions = new List<QCondition>();
+	private List<QICondition> conditions = new List<QICondition>();
 	private List<Q> subQueries = new List<Q>();
 
 	public Q(SObjectType fromType)	{ this.fromText = String.valueOf(fromType); }
@@ -33,6 +34,21 @@ public class Q {
 		return cond;
 	}
 
+	/*
+	 * Instantiate a DateLiteral object
+	 */
+	public static QDateLiteral dateLiteral(QDateLiteral.Value literal) {
+		return dateLiteral(literal, null);
+	}
+
+	/*
+	 * Instantiate a DateLiteral object
+	 */
+	public static QDateLiteral dateLiteral(QDateLiteral.Value literal, Integer value) {
+		QDateLiteral dateLiteral = new QDateLiteral(literal, value);
+		return dateLiteral;
+	}
+
 	/**
 	 * Instantiate a BindVariable object
 	 */
@@ -52,7 +68,7 @@ public class Q {
 	/**
 	 * Add a Condition statement
 	 */
-	public Q add(QCondition cnd) {
+	public Q add(QICondition cnd) {
 		this.conditions.add(cnd);
 		return this;
 	}
@@ -86,6 +102,22 @@ public class Q {
 	}
 
 	/**
+	 * Add a GROUP BY statement
+	 */
+	public Q groupBy(String fieldName) {
+		this.groupBy.add(fieldName);
+		return this;
+	}
+
+	/**
+	 * Add a GROUP BY statement
+	 */
+	public Q groupBy(Set<String> fieldNames) {
+		this.groupBy.addAll(fieldNames);
+		return this;
+	}
+
+	/**
 	 * Add a LIMIT statement
 	 */
 	public Q addLimit(Integer i) {
@@ -100,6 +132,22 @@ public class Q {
 		this.numberOfRowsToSkip = i;
 		return this;
 	}
+
+	/**
+     * Instantiate a parenthetical OR condition group
+     */
+    public static QConditionGroup orGroup() {
+        QOrGroup orGroup = new QOrGroup();
+        return orGroup;
+    }
+
+    /**
+     * Instantiate a parenthetical AND condition group
+     */
+    public static QConditionGroup andGroup() {
+        QAndGroup andGroup = new QAndGroup();
+        return andGroup;
+    }
 
 	/**
 	 * Build the SELECT statement
@@ -122,12 +170,23 @@ public class Q {
 	public String buildConditions() {
 		List<String> condList = new List<String>();
 
-		for (QCondition cond : this.conditions) {
+		for (QICondition cond : this.conditions) {
 			condList.add(cond.build());
 		}
 
 		if (!this.conditions.isEmpty()) {
 			return 'WHERE ' + String.join(condList, ' AND ');
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Build the GROUP BY statement
+	 */
+	public String buildGroupBy() {
+		if (!this.groupBy.isEmpty()) {
+			return 'GROUP BY ' + String.join(new List<String>(this.groupBy), ', ');
 		} else {
 			return null;
 		}
@@ -166,6 +225,10 @@ public class Q {
 
 		if (!this.orders.isEmpty()) {
 			queryParts.add(this.buildOrderBy());
+		}
+
+		if (!this.groupBy.isEmpty()) {
+			queryParts.add(this.buildGroupBy());
 		}
 
 		if (this.numberOfRows != null) {

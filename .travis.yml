@@ -1,35 +1,29 @@
 sudo: true
-node_js: "7"
+os: osx
+node_js: '8'
+cache: false
 
-cache:
-  directories:
-    - node_modules
-
-before_script:
-  - export URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+before_install:
   - export SFDX_AUTOUPDATE_DISABLE=false
   - export SFDX_USE_GENERIC_UNIX_KEYCHAIN=true
   - export SFDX_DOMAIN_RETRY=300
   - export SFDX_DISABLE_APP_HUB=true
   - export SFDX_LOG_LEVEL=DEBUG
-  - export SFDX_ALIAS=servier-ci-$TRAVIS_BUILD_NUMBER
-  - mkdir sfdx
-  - wget -qO- $URL | tar xJ -C sfdx --strip-components 1
-  - "./sfdx/install"
-  - export PATH=./sfdx/$(pwd):$PATH
+  - export SFDX_IMPROVED_CODE_COVERAGE=true
+  - npm i -g sfdx-cli
   - sfdx update
   - sfdx --version
   - sfdx plugins --core
   - npm install apexcov coveralls -g
-  - echo force://$CLIENT_ID:$CLIENT_SECRET:$REFRESH_TOKEN@$INSTANCE_URL > .sfdx-url
-  - sfdx force:auth:sfdxurl:store --setdefaultdevhubusername --sfdxurlfile ./.sfdx-url --setalias DefaultOrg
+  - openssl aes-256-cbc -K $encrypted_79a2f6093848_key -iv $encrypted_79a2f6093848_iv -in assets/server.key.enc -out assets/server.key -d
+  - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key --username $USERNAME --setdefaultdevhubusername -a DevHub
   - echo y | sfdx plugins:install @mavens/sfdx-commands
-
 script:
-  - sfdx force:org:create --setdefaultusername --definitionfile scratchdef.json --setalias ci
-  - sfdx force:source:push
+  - sfdx force:org:create -v DevHub -s -f scratchdef.json -a ciorg
+  - sfdx force:org:display -u ciorg
+  - sfdx force:source:push -u ciorg
   - mkdir coverage
-  - sfdx force:apex:test:run --codecoverage --testlevel=RunLocalTests --resultformat=human --outputdir=coverage
+  - sfdx force:apex:test:run -u ciorg --codecoverage --testlevel=RunLocalTests --resultformat=human --outputdir=coverage
   - sfdx mavens:ci:lcov
-  - sfdx force:org:delete --noprompt
+  - sfdx force:org:delete -u ciorg -p
   - cat ./coverage/lcov.info | coveralls
