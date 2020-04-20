@@ -92,25 +92,25 @@ public class QCondition implements QICondition {
 		return this;
 	}
 
-	public QCondition isIn(List<Object> values) {
+	public QCondition isIn(Object values) {
 		this.operatorValue = ComparisonOperator.IS_IN;
 		this.fieldValue = values;
 		return this;
 	}
 
-	public QCondition isNotIn(List<Object> values) {
+	public QCondition isNotIn(Object values) {
 		this.operatorValue = ComparisonOperator.NOT_IN;
 		this.fieldValue = values;
 		return this;
 	}
 
-	public QCondition includes(List<Object> values) {
+	public QCondition includes(Object values) {
 		this.operatorValue = ComparisonOperator.INCLUDES;
 		this.fieldValue = values;
 		return this;
 	}
 
-	public QCondition excludes(List<Object> values) {
+	public QCondition excludes(Object values) {
 		this.operatorValue = ComparisonOperator.EXCLUDES;
 		this.fieldValue = values;
 		return this;
@@ -144,12 +144,24 @@ public class QCondition implements QICondition {
 		} else if (operatorValue.equals(ComparisonOperator.IS_LIKE)) {
 			return field + ' LIKE ' + fieldValue;
 		} else if (operatorValue.equals(ComparisonOperator.IS_IN)) {
+			if (fieldValue instanceOf QBindVariable) {
+				return field + ' IN ' + fieldValue;	
+			}
 			return field + ' IN (' + fieldValue + ')';
 		} else if (operatorValue.equals(ComparisonOperator.NOT_IN)) {
+			if (fieldValue instanceOf QBindVariable) {
+				return field + ' NOT IN ' + fieldValue;	
+			}
 			return field + ' NOT IN (' + fieldValue + ')';
 		} else if (operatorValue.equals(ComparisonOperator.INCLUDES)) {
+			if (fieldValue instanceOf QBindVariable) {
+				return field + ' INCLUDES ' + fieldValue;	
+			}
 			return field + ' INCLUDES (' + fieldValue + ')';
 		} else if (operatorValue.equals(ComparisonOperator.EXCLUDES)) {
+			if (fieldValue instanceOf QBindVariable) {
+				return field + ' EXCLUDES ' + fieldValue;	
+			}
 			return field + ' EXCLUDES (' + fieldValue + ')';
 		} else {
 			return '';

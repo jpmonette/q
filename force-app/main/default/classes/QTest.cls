@@ -106,6 +106,17 @@ private class QTest {
 	}
 
 	@isTest
+	static void testBindVariable() {
+		List<String> listOfNames = new List<String> {'Acme', 'Acme 2'};
+		String query =		
+			new Q(Account.SObjectType)
+				.add(Q.condition('Name').isIn(Q.bindVar(':listOfNames')))
+				.build();
+
+		System.assertEquals('SELECT Id FROM Account WHERE Name IN :listOfNames', query);
+  }
+  
+  @isTest
 	static void testGroupBy() {
 		String query =
 			new Q(Lead.SObjectType)
@@ -115,9 +126,25 @@ private class QTest {
 
 		System.assertEquals('SELECT LeadSource, COUNT(Name) FROM Lead GROUP BY LeadSource', query);
 		Database.query(query);
-	}
+  }
 
 	@isTest
+	static void testBindVariableException() {
+		List<String> listOfNames = new List<String> {'Acme', 'Acme 2'};
+		Boolean bindExceptionThrown = false;
+		try {
+			String query =		
+			new Q(Account.SObjectType)
+				.add(Q.condition('Name').isIn(Q.bindVar('listOfNames')))
+				.build();
+		} catch (QBindVariable.QBindVariableException e) {
+			bindExceptionThrown = true;
+		}
+		
+		System.assertEquals(true, bindExceptionThrown);		
+	}
+
+  @isTest
 	static void testGroupByMultiple() {
 		String query =
 			new Q(Lead.SObjectType)

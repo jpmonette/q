@@ -50,6 +50,14 @@ public class Q {
 	}
 
 	/**
+	 * Instantiate a BindVariable object
+	 */
+	public static QBindVariable bindVar(String bindVarName) {
+		QBindVariable bindVar = new QBindVariable(bindVarName);
+		return bindVar;
+	}
+
+	/**
 	 * Add an OrderBy statement
 	 */
 	public Q add(QOrder ob) {
