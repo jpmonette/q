@@ -159,4 +159,34 @@ private class QConditionTest {
 		System.assertEquals('', query);
 	}
 
+	@isTest
+	static void testDistance() {
+		String segment = new QDistance('BillingAddress', 'LocationField__c', QDistance.Unit.mi).isLessThan(20).build();
+		System.assertEquals('DISTANCE(BillingAddress, LocationField__c, \'mi\') < 20', segment);
+	}
+
+	@isTest
+	static void testDistanceGreaterThan() {
+		String segment = new QDistance('BillingAddress', 'LocationField__c', QDistance.Unit.mi).isGreaterThan(20).build();
+		System.assertEquals('DISTANCE(BillingAddress, LocationField__c, \'mi\') > 20', segment);
+	}
+
+	@isTest
+	static void testDistanceInvalidOperator() {
+		Boolean exceptionThrown = false;
+		try {
+			String segment = new QDistance('BillingAddress', 'LocationField__c', QDistance.Unit.mi).equalsTo(20).build();
+		} catch (QDistance.QDistanceException e) {
+			exceptionThrown = true;
+		}
+		
+		System.assertEquals(true, exceptionThrown);
+	}
+
+	@isTest
+	static void testDistanceLatLon() {
+		String segment = new QDistance('BillingAddress', 37.775, -122.418, QDistance.Unit.mi).isLessThan(20).build();
+		System.assertEquals('DISTANCE(BillingAddress, GEOLOCATION(37.775, -122.418), \'mi\') < 20', segment);
+	}
+
 }

@@ -208,4 +208,15 @@ private class QTest {
       Database.query(query);
   }
 
+  @isTest
+	static void testDistance() {
+
+		String query =
+			new Q(Account.SObjectType)
+				.add(Q.distance('BillingAddress', 37.775, -122.418, QDistance.Unit.mi).isLessThan(20))
+				.build();
+
+		System.assertEquals('SELECT Id FROM Account WHERE DISTANCE(BillingAddress, GEOLOCATION(37.775, -122.418), \'mi\') < 20', query);
+		Database.query(query);
+	}
 }

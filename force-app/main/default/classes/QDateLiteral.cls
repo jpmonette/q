@@ -2,7 +2,7 @@
  * Created by fehays on 4/7/2020.
  */
 
-public without sharing class QDateLiteral {
+public class QDateLiteral {
     public enum Value {
         YESTERDAY,TODAY,TOMORROW,LAST_WEEK,THIS_WEEK,NEXT_WEEK,LAST_MONTH,THIS_MONTH,NEXT_MONTH,LAST_90_DAYS,
         NEXT_90_DAYS,LAST_N_DAYS,NEXT_N_DAYS,NEXT_N_WEEKS,LAST_N_WEEKS,NEXT_N_MONTHS,LAST_N_MONTHS,THIS_QUARTER,

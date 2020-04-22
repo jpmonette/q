@@ -18,7 +18,7 @@ public class Q {
 	public Q(SObjectType fromType)	{ this.fromText = String.valueOf(fromType); }
 	public Q(String fromText) 		{ this.fromText = fromText; }
 
-	/**
+	/*
 	 * Instantiate an OrderBy object
 	 */
 	public static QOrder orderBy(String fieldName) {
@@ -26,12 +26,28 @@ public class Q {
 		return od;
 	}
 
-	/**
+	/*
 	 * Instantiate a Condition object
 	 */
 	public static QCondition condition(String fieldName) {
 		QCondition cond = new QCondition(fieldName);
 		return cond;
+	}
+
+	/*
+	 * Instantiate a Distance object using location fields
+	 */
+	public static QDistance distance(String fromFieldName, String toFieldName, QDistance.Unit unit) {
+		QDistance dist = new QDistance(fromFieldName, toFieldName, unit);
+		return dist;
+	}
+
+	/*
+	 * Instantiate a Distance object using lat/lon
+	 */
+	public static QDistance distance(String fromFieldName, Decimal lat, Decimal lon, QDistance.Unit unit) {
+		QDistance dist = new QDistance(fromFieldName, lat, lon, unit);
+		return dist;
 	}
 
 	/*
