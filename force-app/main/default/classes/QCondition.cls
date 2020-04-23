@@ -7,17 +7,18 @@ public virtual class QCondition implements QICondition {
 
     public enum ComparisonOperator { EQUALS, NOT_EQUALS, LESS_THAN, LESS_OR_EQUAL, GREATER_THAN, GREATER_OR_EQUAL, IS_LIKE, IS_IN, NOT_IN, INCLUDES, EXCLUDES }
 
-    private ComparisonOperator operatorValue;
+    protected ComparisonOperator operatorValue;
 
-    private String field {
-        private get { return String.escapeSingleQuotes(field); }
-        private set;
+    protected String field {
+        protected get { return String.escapeSingleQuotes(field); }
+        protected set;
     }
 
-    private Object fieldValue {
-        private get { return formatFieldValue(fieldValue); }
-        private set { fieldValue = value; }
+    protected Object fieldValue {
+        protected get { return formatFieldValue(fieldValue); }
+        protected set { fieldValue = value; }
     }
+
     public QCondition(String field) {
         this.field = field;
     }
@@ -167,4 +168,5 @@ public virtual class QCondition implements QICondition {
             return '';
         }
     }
+
 }
