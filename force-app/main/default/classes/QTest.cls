@@ -161,8 +161,8 @@ private class QTest {
       String query =
           new Q(Account.SObjectType)
               .add(Q.orGroup()
-                .add(Q.condition('Name').equalsTo('test'))
-                .add(Q.condition('Name').equalsTo('test'))
+                .add(Q.condition('Name').isEqualTo('test'))
+                .add(Q.condition('Name').isEqualTo('test'))
             )
             .build();
 
@@ -170,8 +170,8 @@ private class QTest {
       Database.query(query);
 
       List<QCondition> conditions = new List<QCondition>();
-      conditions.add(Q.condition('Name').equalsTo('test'));
-      conditions.add(Q.condition('Name').equalsTo('test'));
+      conditions.add(Q.condition('Name').isEqualTo('test'));
+      conditions.add(Q.condition('Name').isEqualTo('test'));
       QOrGroup sbOrGroup = new QOrGroup(conditions);
       query =
           new Q(Account.SObjectType)
@@ -187,8 +187,8 @@ private class QTest {
       String query =
           new Q(Account.SObjectType)
               .add(Q.andGroup()
-                  .add(Q.condition('Name').equalsTo('test'))
-                  .add(Q.condition('Name').equalsTo('test'))
+                  .add(Q.condition('Name').isEqualTo('test'))
+                  .add(Q.condition('Name').isEqualTo('test'))
               )
               .build();
 
@@ -196,8 +196,8 @@ private class QTest {
       Database.query(query);
 
       List<QCondition> conditions = new List<QCondition>();
-      conditions.add(Q.condition('Name').equalsTo('test'));
-      conditions.add(Q.condition('Name').equalsTo('test'));
+      conditions.add(Q.condition('Name').isEqualTo('test'));
+      conditions.add(Q.condition('Name').isEqualTo('test'));
       QAndGroup sbAndGroup = new QAndGroup(conditions);
       query =
           new Q(Account.SObjectType)

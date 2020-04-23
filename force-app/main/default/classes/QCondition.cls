@@ -50,13 +50,13 @@ public class QCondition implements QICondition {
 		return String.escapeSingleQuotes(value.replace('\\', '\\\\'));
 	}
 
-	public QCondition equalsTo(Object value) {
+	public QCondition isEqualTo(Object value) {
 		this.operatorValue = ComparisonOperator.EQUALS;
 		this.fieldValue = value;
 		return this;
 	}
 
-	public QCondition notEqualsTo(Object value) {
+	public QCondition isNotEqualTo(Object value) {
 		this.operatorValue = ComparisonOperator.NOT_EQUALS;
 		this.fieldValue = value;
 		return this;

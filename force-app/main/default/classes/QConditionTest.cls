@@ -8,26 +8,26 @@ private class QConditionTest {
 
 	@isTest
 	static void testEqualsString() {
-		String segment = new QCondition('Name').equalsTo('Jean-Philippe Monette').build();
+		String segment = new QCondition('Name').isEqualTo('Jean-Philippe Monette').build();
 		System.assertEquals('Name = \'Jean-Philippe Monette\'', segment);
 	}
 
 	@isTest
 	static void testEqualsInteger() {
-		String segment = new QCondition('Age').equalsTo(5).build();
+		String segment = new QCondition('Age').isEqualTo(5).build();
 		System.assertEquals('Age = 5', segment);
 	}
 
 	@isTest
 	static void testEqualsIntegerBindVar() {
 		Integer ageVar = 5;
-		String segment = new QCondition('Age').equalsTo(Q.bindVar(':ageVar')).build();
+		String segment = new QCondition('Age').isEqualTo(Q.bindVar(':ageVar')).build();
 		System.assertEquals('Age = :ageVar', segment);
 	}
 
 	@isTest
 	static void testNotEquals() {
-		String segment = new QCondition('Name').notEqualsTo('Jean-Philippe Monette').build();
+		String segment = new QCondition('Name').isNotEqualTo('Jean-Philippe Monette').build();
 		System.assertEquals('Name != \'Jean-Philippe Monette\'', segment);
 	}
 
@@ -131,10 +131,10 @@ private class QConditionTest {
 
 	@isTest
 	static void testDateLiteral() {
-		String segment = new QCondition('CreatedDate').equalsTo(Q.dateLiteral(QDateLiteral.Value.LAST_N_DAYS, 7)).build();
+		String segment = new QCondition('CreatedDate').isEqualTo(Q.dateLiteral(QDateLiteral.Value.LAST_N_DAYS, 7)).build();
 		System.assertEquals('CreatedDate = LAST_N_DAYS:7', segment);
 
-		segment = new QCondition('CreatedDate').equalsTo(Q.dateLiteral(QDateLiteral.Value.YESTERDAY)).build();
+		segment = new QCondition('CreatedDate').isEqualTo(Q.dateLiteral(QDateLiteral.Value.YESTERDAY)).build();
 		System.assertEquals('CreatedDate = YESTERDAY', segment);
 	}
 
