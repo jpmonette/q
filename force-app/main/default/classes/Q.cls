@@ -13,6 +13,7 @@ public class Q {
 	private Set<String> groupBy = new Set<String>();
 	private List<QOrder> orders = new List<QOrder>();
 	private List<QICondition> conditions = new List<QICondition>();
+	private List<QICondition> havingConditions = new List<QICondition>();
 	private List<Q> subQueries = new List<Q>();
 
 	public Q(SObjectType fromType)	{ this.fromText = String.valueOf(fromType); }
@@ -65,7 +66,7 @@ public class Q {
 		return dateLiteral;
 	}
 
-	/**
+	/*
 	 * Instantiate a BindVariable object
 	 */
 	public static QBindVariable bindVar(String bindVarName) {
@@ -73,7 +74,7 @@ public class Q {
 		return bindVar;
 	}
 
-	/**
+	/*
 	 * Add an OrderBy statement
 	 */
 	public Q add(QOrder ob) {
@@ -81,7 +82,7 @@ public class Q {
 		return this;
 	}
 
-	/**
+	/*
 	 * Add a Condition statement
 	 */
 	public Q add(QICondition cnd) {
@@ -89,7 +90,7 @@ public class Q {
 		return this;
 	}
 
-	/**
+	/*
 	 * Add an SELECT sub-query
 	 */
 	public Q addSubquery(Q qb) {
@@ -107,7 +108,7 @@ public class Q {
 		return this;
 	}
 
-	/**
+	/*
 	 * Add fields to the SELECT statement from Set of Strings
 	 */
 	public Q selectFields(Set<String> fields) {
@@ -117,7 +118,7 @@ public class Q {
 		return this;
 	}
 
-	/**
+	/*
 	 * Add a GROUP BY statement
 	 */
 	public Q groupBy(String fieldName) {
@@ -125,7 +126,7 @@ public class Q {
 		return this;
 	}
 
-	/**
+	/*
 	 * Add a GROUP BY statement
 	 */
 	public Q groupBy(Set<String> fieldNames) {
@@ -133,7 +134,15 @@ public class Q {
 		return this;
 	}
 
-	/**
+	/*
+	 * Add a HAVING condition statement
+	 */
+	public Q havingCondition(QICondition cnd) {
+		this.havingConditions.add(cnd);
+		return this;
+	}
+
+	/*
 	 * Add a LIMIT statement
 	 */
 	public Q addLimit(Integer i) {
@@ -141,7 +150,7 @@ public class Q {
 		return this;
 	}
 
-	/**
+	/*
 	 * Add an OFFSET statement
 	 */
 	public Q addOffset(Integer i) {
@@ -149,7 +158,7 @@ public class Q {
 		return this;
 	}
 
-	/**
+	/*
      * Instantiate a parenthetical OR condition group
      */
     public static QConditionGroup orGroup() {
@@ -157,7 +166,7 @@ public class Q {
         return orGroup;
     }
 
-    /**
+    /*
      * Instantiate a parenthetical AND condition group
      */
     public static QConditionGroup andGroup() {
@@ -165,7 +174,7 @@ public class Q {
         return andGroup;
     }
 
-	/**
+	/*
 	 * Build the SELECT statement
 	 */
 	public String buildSelect() {
@@ -180,7 +189,7 @@ public class Q {
 		}
 	}
 
-	/**
+	/*
 	 * Build the WHERE statement
 	 */
 	public String buildConditions() {
@@ -197,7 +206,7 @@ public class Q {
 		}
 	}
 
-	/**
+	/*
 	 * Build the GROUP BY statement
 	 */
 	public String buildGroupBy() {
@@ -208,7 +217,24 @@ public class Q {
 		}
 	}
 
-	/**
+	/*
+	 * Build the HAVING statement
+	 */
+	public String buildHavingConditions() {
+		List<String> condList = new List<String>();
+
+		for (QICondition cond : this.havingConditions) {
+			condList.add(cond.build());
+		}
+
+		if (!this.havingConditions.isEmpty()) {
+			return 'HAVING ' + String.join(condList, ' AND ');
+		} else {
+			return null;
+		}
+	}
+
+	/*
 	 * Build the ORDER BY statement
 	 */
 	public String buildOrderBy() {
@@ -226,7 +252,7 @@ public class Q {
 
 	}
 
-	/**
+	/*
 	 * Build the SOQL query
 	 */
 	public String build() {
@@ -245,6 +271,10 @@ public class Q {
 
 		if (!this.groupBy.isEmpty()) {
 			queryParts.add(this.buildGroupBy());
+		}
+
+		if (!this.havingConditions.isEmpty()) {
+			queryParts.add(this.buildHavingConditions());
 		}
 
 		if (this.numberOfRows != null) {

@@ -9,7 +9,7 @@ A Dynamic [SOQL Query](https://developer.salesforce.com/docs/atlas.en-us.soql_so
 
 Deploy the Apex classes from the `./force-app/main/default/classes/` repository into your Salesforce project.
 
-## Usage
+## Basic Usage
 
 ```java
 Q query = new Q(Account.SObjectType)
@@ -38,6 +38,29 @@ if (String.isNotBlank(lastName)) {
 
 System.debug(query.build());
 // SELECT Id FROM Contact WHERE FirstName = 'Céline' AND LastName = 'Dion' LIMIT 5
+```
+
+## Bind Variables
+```java
+String accountName = '%Acme%';
+Q query = new Q(Account.SObjectType)
+    .selectFields('Id')
+    .add(Q.condition('Name').isLike(Q.bindVar(':accountName')));
+
+System.debug(query.build());
+// SELECT Id FROM Account WHERE Name LIKE :accountName
+```
+
+## Parenthetical Groups
+```java
+Q query =
+new Q(Account.SObjectType)
+  .add(Q.orGroup()
+    .add(Q.condition('Name').isEqualTo('Acme 1'))
+    .add(Q.condition('Name').isEqualTo('Acme 2')))
+
+System.debug(query.build());
+//SELECT Id FROM Account WHERE (Name = 'Acme 1' OR Name = 'Acme 2')
 ```
 
 ## Roadmap
