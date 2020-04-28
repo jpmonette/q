@@ -4,18 +4,10 @@
 * @since   2020-02-04
 */
 public abstract class QConditionGroup implements QICondition {
-    
-    public enum LogicalOperator { AND_x, OR_x }
-
-    private static Map<String, String> operatorMap = new Map<String, String>
-    {
-        'AND_x' => 'AND',
-        'OR_x' => 'OR'
-    };
 
     protected List<QICondition> conditions { get; set; }
 
-    protected LogicalOperator operator;
+    protected String operator;
 
     public Boolean hasConditions {
         get {
@@ -23,11 +15,11 @@ public abstract class QConditionGroup implements QICondition {
         }
     }
 
-    public QConditionGroup(LogicalOperator operator) {
+    public QConditionGroup(String operator) {
         this(new List<QICondition>(), operator);
     }
 
-    public QConditionGroup(List<QICondition> conditions, LogicalOperator operator) {
+    public QConditionGroup(List<QICondition> conditions, String operator) {
         this.conditions = conditions;
         this.operator = operator;
     }
@@ -43,7 +35,7 @@ public abstract class QConditionGroup implements QICondition {
 
         for (QICondition condition : conditions) {
             if (String.isNotEmpty(value))
-                value += ' ' + operatorMap.get(operator.name()) + ' ';
+                value += ' ' + operator + ' ';
             value += condition.build();
         }
 
