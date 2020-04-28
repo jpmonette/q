@@ -5,10 +5,10 @@
 */
 public class QOrGroup extends QConditionGroup {
     public QOrGroup() {
-        super(LogicalOperator.OR_x);
+        super('OR');
     }
 
     public QOrGroup(List<QICondition> conditions) {
-        super(conditions, LogicalOperator.OR_x);
+        super(conditions, 'OR');
     }
 }
