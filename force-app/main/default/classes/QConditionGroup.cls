@@ -34,8 +34,9 @@ public abstract class QConditionGroup implements QICondition {
         String value = '';
 
         for (QICondition condition : conditions) {
-            if (String.isNotEmpty(value))
+            if (String.isNotEmpty(value)) {
                 value += ' ' + operator + ' ';
+            }
             value += condition.build();
         }
 
