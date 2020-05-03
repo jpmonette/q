@@ -12,7 +12,8 @@ private class QTest {
 			new Q(Account.SObjectType)
 				.build();
 
-		System.assertEquals('SELECT Id FROM Account', query);
+		String expected = 'SELECT Id FROM Account';
+		System.assertEquals(expected, query, 'It should output a default query.');
 		Database.query(query);
 	}
 
@@ -23,7 +24,8 @@ private class QTest {
 				.addSubquery(new Q('Contacts'))
 				.build();
 
-		System.assertEquals('SELECT (SELECT Id FROM Contacts) FROM Account', query);
+		String expected = 'SELECT (SELECT Id FROM Contacts) FROM Account';
+		System.assertEquals(expected, query, 'It should output a query with subquery.');
 		Database.query(query);
 	}
 
@@ -34,7 +36,8 @@ private class QTest {
 				.selectFields(SObjectType.Account.fieldSets.Example)
 				.build();
 
-		System.assertEquals('SELECT CreatedById, Description, Owner.Email FROM Account', query);
+		String expected = 'SELECT CreatedById, Description, Owner.Email FROM Account';
+		System.assertEquals(expected, query, 'It should output a query using a fieldset.');
 		Database.query(query);
 	}
 
@@ -45,7 +48,8 @@ private class QTest {
 				.selectFields(new Set<String>{'CreatedById', 'Description', 'Owner.Email'})
 				.build();
 
-		System.assertEquals('SELECT CreatedById, Description, Owner.Email FROM Account', query);
+		String expected = 'SELECT CreatedById, Description, Owner.Email FROM Account';
+		System.assertEquals(expected, query, 'It should output a query with a SELECT.');
 		Database.query(query);
 	}
 
@@ -57,7 +61,8 @@ private class QTest {
 				.add(Q.orderBy('BillingCountry').descending())
 				.build();
 
-		System.assertEquals('SELECT Id FROM Account ORDER BY Name ASC NULLS LAST, BillingCountry DESC', query);
+		String expected = 'SELECT Id FROM Account ORDER BY Name ASC NULLS LAST, BillingCountry DESC';
+		System.assertEquals(expected, query, 'It should output a query with orders.');
 		Database.query(query);
 	}
 
@@ -68,7 +73,8 @@ private class QTest {
 				.add(Q.condition('BillingCountry').isNotNull())
 				.build();
 
-		System.assertEquals('SELECT Id FROM Account WHERE BillingCountry != null', query);
+		String expected = 'SELECT Id FROM Account WHERE BillingCountry != null';
+		System.assertEquals(expected, query, 'It should output a query with a condition.');
 		Database.query(query);
 	}
 
@@ -79,7 +85,8 @@ private class QTest {
 				.add(Q.condition('Name').isLike('%Acme%'))
 				.build();
 
-		System.assertEquals('SELECT Id FROM Account WHERE Name LIKE \'%Acme%\'', query);
+		String expected = 'SELECT Id FROM Account WHERE Name LIKE \'%Acme%\'';
+		System.assertEquals(expected, query, 'It should output a query with a condition.');
 		Database.query(query);
 	}
 
@@ -90,7 +97,8 @@ private class QTest {
 				.addLimit(5)
 				.build();
 
-		System.assertEquals('SELECT Id FROM Account LIMIT 5', query);
+		String expected = 'SELECT Id FROM Account LIMIT 5';
+		System.assertEquals(expected, query, 'It should output a query with a LIMIT.');
 		Database.query(query);
 	}
 
@@ -101,7 +109,8 @@ private class QTest {
 				.addOffset(5)
 				.build();
 
-		System.assertEquals('SELECT Id FROM Account OFFSET 5', query);
+		String expected = 'SELECT Id FROM Account OFFSET 5';
+		System.assertEquals(expected, query, 'It should output a query with an OFFSET.');
 		Database.query(query);
 	}
 
@@ -115,7 +124,8 @@ private class QTest {
             	)
             	.build();
 
-        System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')', query);
+		String expected = 'SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')';
+        System.assertEquals(expected, query, 'It should output a query with a condition group.');
         Database.query(query);
 
         List<QCondition> conditions = new List<QCondition>();
@@ -127,7 +137,8 @@ private class QTest {
                 .add(sbOrGroup)
                 .build();
 
-        System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')', query);
+		String expected2 = 'SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')';
+        System.assertEquals(expected2, query, 'It should output a query with a condition group.');
         Database.query(query);
     }
 
@@ -141,7 +152,8 @@ private class QTest {
                 )
                 .build();
 
-        System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')', query);
+		String expected = 'SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')';
+        System.assertEquals(expected, query, 'It should output a query with a condition group.');
         Database.query(query);
 
         List<QCondition> conditions = new List<QCondition>();
@@ -153,7 +165,8 @@ private class QTest {
                 .add(sbAndGroup)
             .build();
 
-        System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')', query);
+		String expected2 = 'SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')';
+        System.assertEquals(expected2, query, 'It should output a query with a condition group.');
         Database.query(query);
     }
 
