@@ -155,6 +155,29 @@ private class QTest {
 
         System.assertEquals('SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')', query);
         Database.query(query);
+	}
+	
+	@isTest
+    static void testTypeOf() {
+        String query =
+            new Q(Event.SObjectType)
+                .selectFields(Q.typeOf('What')
+                    .when('Account').then(new Set<String> {'Phone', 'NumberOfEmployees'})   
+                    .when('Opportunity').then(new Set<String> {'Amount', 'CloseDate'})                 
+                    .otherwise(new Set<String> {'Name', 'Email'})
+                )
+                .build();
+
+        String expected = 'SELECT ' + 
+                            'TYPEOF What ' +
+                            'WHEN Account THEN Phone,NumberOfEmployees ' +
+                            'WHEN Opportunity THEN Amount,CloseDate ' +
+                            'ELSE Name,Email ' +
+                            'END ' +
+                        'FROM Event';
+
+        System.assertEquals(expected, query);
+        Database.query(query);
     }
 
 }
