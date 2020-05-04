@@ -133,9 +133,11 @@ private class QTest {
 							'END ' +
 						'FROM Event';
 
-		System.assertEquals(expected, query);
+		System.assertEquals(expected, query, 'It should output a query with a TYPEOF');
 		Database.query(query);
 	}
+
+	@isTest
     static void testOrGroup() {
         String query =
             new Q(Account.SObjectType)
