@@ -3,7 +3,7 @@
 * @author  Jean-Philippe Monette
 * @since   2017-03-21
 */
-public class QCondition {
+public class QCondition implements QICondition {
 
 	public enum ComparisonOperator { EQUALS, NOT_EQUALS, LESS_THAN, LESS_OR_EQUAL, GREATER_THAN, GREATER_OR_EQUAL, IS_LIKE, IS_IN, NOT_IN, INCLUDES, EXCLUDES }
 
@@ -127,30 +127,43 @@ public class QCondition {
 	}
 
 	public String build() {
-		if (operatorValue.equals(ComparisonOperator.EQUALS)) {
-			return field + ' = ' + fieldValue;
-		} else if (operatorValue.equals(ComparisonOperator.NOT_EQUALS)) {
-			return field + ' != ' + fieldValue;
-		} else if (operatorValue.equals(ComparisonOperator.LESS_THAN)) {
-			return field + ' < ' + fieldValue;
-		} else if (operatorValue.equals(ComparisonOperator.LESS_OR_EQUAL)) {
-			return field + ' <= ' + fieldValue;
-		} else if (operatorValue.equals(ComparisonOperator.GREATER_THAN)) {
-			return field + ' > ' + fieldValue;
-		} else if (operatorValue.equals(ComparisonOperator.GREATER_OR_EQUAL)) {
-			return field + ' >= ' + fieldValue;
-		} else if (operatorValue.equals(ComparisonOperator.IS_LIKE)) {
-			return field + ' LIKE ' + fieldValue;
-		} else if (operatorValue.equals(ComparisonOperator.IS_IN)) {
-			return field + ' IN (' + fieldValue + ')';
-		} else if (operatorValue.equals(ComparisonOperator.NOT_IN)) {
-			return field + ' NOT IN (' + fieldValue + ')';
-		} else if (operatorValue.equals(ComparisonOperator.INCLUDES)) {
-			return field + ' INCLUDES (' + fieldValue + ')';
-		} else if (operatorValue.equals(ComparisonOperator.EXCLUDES)) {
-			return field + ' EXCLUDES (' + fieldValue + ')';
-		} else {
-			return '';
+		switch on operatorValue {
+			when EQUALS {
+				return field + ' = ' + fieldValue;
+			}
+			when NOT_EQUALS {
+				return field + ' != ' + fieldValue;
+			}
+			when LESS_THAN {
+				return field + ' < ' + fieldValue;
+			}
+			when LESS_OR_EQUAL {
+				return field + ' <= ' + fieldValue;
+			}
+			when GREATER_THAN {
+				return field + ' > ' + fieldValue;
+			}
+			when GREATER_OR_EQUAL {
+				return field + ' >= ' + fieldValue;
+			}
+			when IS_LIKE {
+				return field + ' LIKE ' + fieldValue;
+			}
+			when IS_IN {
+				return field + ' IN (' + fieldValue + ')';
+			}
+			when NOT_IN {
+				return field + ' NOT IN (' + fieldValue + ')';
+			}
+			when INCLUDES {
+				return field + ' INCLUDES (' + fieldValue + ')';
+			}
+			when EXCLUDES {
+				return field + ' EXCLUDES (' + fieldValue + ')';
+			}
+			when else {
+				return '';
+			}
 		}
 	}
 

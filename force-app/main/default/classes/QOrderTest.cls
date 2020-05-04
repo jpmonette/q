@@ -9,31 +9,31 @@ private class QOrderTest {
 	@isTest
 	static void testConstructor() {
 		String segment = new QOrder('Name').build();
-		System.assertEquals('Name ASC', segment);
+		System.assertEquals('Name ASC', segment, 'It should output an ASC order by default.');
 	}
 
 	@isTest
 	static void testAscending() {
 		String segment = new QOrder('Name').ascending().build();
-		System.assertEquals('Name ASC', segment);
+		System.assertEquals('Name ASC', segment, 'It should output an ASC order.');
 	}
 
 	@isTest
 	static void testDescending() {
 		String segment = new QOrder('Name').descending().build();
-		System.assertEquals('Name DESC', segment);
+		System.assertEquals('Name DESC', segment, 'It should output a DESC order.');
 	}
 
 	@isTest
 	static void testNullsFirst() {
 		String segment = new QOrder('Name').nullsFirst().build();
-		System.assertEquals('Name ASC NULLS FIRST', segment);
+		System.assertEquals('Name ASC NULLS FIRST', segment, 'It should output an ASC NULLS FIRST order.');
 	}
 
 	@isTest
 	static void testNullsLast() {
 		String segment = new QOrder('Name').nullsLast().build();
-		System.assertEquals('Name ASC NULLS LAST', segment);
+		System.assertEquals('Name ASC NULLS LAST', segment, 'It should output an ASC NULLS LAST order.');
 	}
 
 }
