@@ -115,59 +115,84 @@ private class QTest {
 	}
 
 	@isTest
-    static void testOrGroup() {
-        String query =
-            new Q(Account.SObjectType)
-                .add(Q.orGroup()
-                	.add(Q.condition('Name').equalsTo('test'))
-                	.add(Q.condition('Name').equalsTo('test'))
-            	)
-            	.build();
+	static void testEscapedBackslash() {
+		// test when name contains single quote ' char.  E.g. - Acme's Carwash
+		String query =
+			new Q(Account.SObjectType)
+				.add(Q.condition('Name').equalsTo('Acme\'s Carwash'))
+				.build();
+
+		String expected = 'SELECT Id FROM Account WHERE Name = \'Acme\\\'s Carwash\'';
+		System.assertEquals(expected, query, 'Backslash should be escaped correctly');
+		Database.query(query);
+	}
+
+	@isTest
+	static void testEscapedBackslash2() {
+		// test name contains backslash \ char.  E.g. - Acme\s Carwash
+		String query =
+			new Q(Account.SObjectType)
+				.add(Q.condition('Name').equalsTo('Acme\\s Carwash'))
+				.build();
+		String expected = 'SELECT Id FROM Account WHERE Name = \'Acme\\\\\\\\s Carwash\'';
+		System.assertEquals('SELECT Id FROM Account WHERE Name = \'Acme\\\\\\\\s Carwash\'', query, 'Backslash should be escaped correctly');
+		Database.query(query);
+	}
+
+	@isTest
+	static void testOrGroup() {
+		String query =
+			new Q(Account.SObjectType)
+				.add(Q.orGroup()
+					.add(Q.condition('Name').equalsTo('test'))
+					.add(Q.condition('Name').equalsTo('test'))
+				)
+				.build();
 
 		String expected = 'SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')';
-        System.assertEquals(expected, query, 'It should output a query with a condition group.');
-        Database.query(query);
+		System.assertEquals(expected, query, 'It should output a query with a condition group.');
+		Database.query(query);
 
-        List<QCondition> conditions = new List<QCondition>();
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        QOrGroup sbOrGroup = new QOrGroup(conditions);
-        query =
-            new Q(Account.SObjectType)
-                .add(sbOrGroup)
-                .build();
+		List<QCondition> conditions = new List<QCondition>();
+		conditions.add(Q.condition('Name').equalsTo('test'));
+		conditions.add(Q.condition('Name').equalsTo('test'));
+		QOrGroup sbOrGroup = new QOrGroup(conditions);
+		query =
+			new Q(Account.SObjectType)
+				.add(sbOrGroup)
+				.build();
 
 		String expected2 = 'SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')';
-        System.assertEquals(expected2, query, 'It should output a query with a condition group.');
-        Database.query(query);
-    }
+		System.assertEquals(expected2, query, 'It should output a query with a condition group.');
+		Database.query(query);
+	}
 
-    @isTest
-    static void testAndGroup() {
-        String query =
-            new Q(Account.SObjectType)
-                .add(Q.andGroup()
-                    .add(Q.condition('Name').equalsTo('test'))
-                    .add(Q.condition('Name').equalsTo('test'))
-                )
-                .build();
+	@isTest
+	static void testAndGroup() {
+		String query =
+			new Q(Account.SObjectType)
+				.add(Q.andGroup()
+					.add(Q.condition('Name').equalsTo('test'))
+					.add(Q.condition('Name').equalsTo('test'))
+				)
+				.build();
 
 		String expected = 'SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')';
-        System.assertEquals(expected, query, 'It should output a query with a condition group.');
-        Database.query(query);
+		System.assertEquals(expected, query, 'It should output a query with a condition group.');
+		Database.query(query);
 
-        List<QCondition> conditions = new List<QCondition>();
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        QAndGroup sbAndGroup = new QAndGroup(conditions);
-        query =
-            new Q(Account.SObjectType)
-                .add(sbAndGroup)
-            .build();
+		List<QCondition> conditions = new List<QCondition>();
+		conditions.add(Q.condition('Name').equalsTo('test'));
+		conditions.add(Q.condition('Name').equalsTo('test'));
+		QAndGroup sbAndGroup = new QAndGroup(conditions);
+		query =
+			new Q(Account.SObjectType)
+				.add(sbAndGroup)
+			.build();
 
 		String expected2 = 'SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')';
-        System.assertEquals(expected2, query, 'It should output a query with a condition group.');
-        Database.query(query);
-    }
+		System.assertEquals(expected2, query, 'It should output a query with a condition group.');
+		Database.query(query);
+	}
 
 }
