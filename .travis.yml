@@ -1,35 +1,47 @@
 sudo: true
-node_js: "7"
+os: xenial
 
-cache:
-  directories:
-    - node_modules
+env:
+  global:
+    - SFDX_ALIAS=jpmonette-q-$TRAVIS_BUILD_NUMBER
 
-before_script:
-  - export URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
-  - export SFDX_AUTOUPDATE_DISABLE=false
-  - export SFDX_USE_GENERIC_UNIX_KEYCHAIN=true
-  - export SFDX_DOMAIN_RETRY=300
-  - export SFDX_DISABLE_APP_HUB=true
-  - export SFDX_LOG_LEVEL=DEBUG
-  - export SFDX_ALIAS=servier-ci-$TRAVIS_BUILD_NUMBER
-  - mkdir sfdx
-  - wget -qO- $URL | tar xJ -C sfdx --strip-components 1
-  - "./sfdx/install"
-  - export PATH=./sfdx/$(pwd):$PATH
-  - sfdx update
-  - sfdx --version
-  - sfdx plugins --core
-  - npm install apexcov coveralls -g
-  - echo force://$CLIENT_ID:$CLIENT_SECRET:$REFRESH_TOKEN@$INSTANCE_URL > .sfdx-url
-  - sfdx force:auth:sfdxurl:store --setdefaultdevhubusername --sfdxurlfile ./.sfdx-url --setalias DefaultOrg
-  - echo y | sfdx plugins:install @mavens/sfdx-commands
+jobs:
+  include:
+    - stage: "Static code analysis"
+      name: 🕵🏼‍♂️ Static code analysis (PMD)
+      install: bash scripts/ci/installPMD.sh
+      script: bash scripts/ci/runPMD.sh
 
-script:
-  - sfdx force:org:create --setdefaultusername --definitionfile scratchdef.json --setalias ci
-  - sfdx force:source:push
-  - mkdir coverage
-  - sfdx force:apex:test:run --codecoverage --testlevel=RunLocalTests --resultformat=human --outputdir=coverage
-  - sfdx mavens:ci:lcov
-  - sfdx force:org:delete --noprompt
-  - cat ./coverage/lcov.info | coveralls
+    - stage: "Salesforce Scratch-Org"
+      name: 🚀 Creating Scratch-Org
+      workspaces:
+        create:
+          name: sfdx
+          paths:
+            - sfdx # for the sfdx install files
+            - $HOME/.sfdx # for the authenticated orgs
+      install: bash scripts/ci/installSFDX.sh
+      script: bash scripts/ci/createOrg.sh
+
+    - stage: "Push"
+      name: "🙇 Pushing Metadata"
+      workspaces:
+        use: sfdx
+      install: bash scripts/ci/installDX.sh
+      script: bash scripts/ci/push.sh
+
+    - stage: "Tests"
+      name: "🧪 Running Apex Tests"
+      env: dir=null
+      workspaces:
+        use: sfdx
+      install: bash scripts/ci/installApexTests.sh
+      script: bash scripts/ci/runApexTests.sh
+
+    - stage: "Cleanup"
+      name: "🧹 Deleting Scratch Org"
+      env: dir=null
+      workspaces:
+        use: sfdx
+      install: bash scripts/ci/installDX.sh
+      script: bash scripts/ci/deleteOrg.sh
