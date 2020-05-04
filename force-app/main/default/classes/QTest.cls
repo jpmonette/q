@@ -115,6 +115,29 @@ private class QTest {
 	}
 
 	@isTest
+	static void testTypeOf() {
+		String query =
+			new Q(Event.SObjectType)
+				.selectFields(Q.typeOf('What')
+					.when('Account').then(new Set<String> {'Phone', 'NumberOfEmployees'})   
+					.when('Opportunity').then(new Set<String> {'Amount', 'CloseDate'})                 
+					.otherwise(new Set<String> {'Name', 'Email'})
+				)
+				.build();
+
+		String expected = 'SELECT ' + 
+							'TYPEOF What ' +
+							'WHEN Account THEN Phone,NumberOfEmployees ' +
+							'WHEN Opportunity THEN Amount,CloseDate ' +
+							'ELSE Name,Email ' +
+							'END ' +
+						'FROM Event';
+
+		System.assertEquals(expected, query, 'It should output a query with a TYPEOF');
+		Database.query(query);
+	}
+
+	@isTest
     static void testOrGroup() {
         String query =
             new Q(Account.SObjectType)
