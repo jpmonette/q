@@ -94,4 +94,54 @@ private class QConditionTest {
 		System.assertEquals('Name != null', segment, 'It should output a IS NOT NULL condition.');
 	}
 
+	@isTest
+	static void testDistance() {
+		String segment = new QDistance('BillingAddress').to('LocationField__c').isLessThan(20).build();
+		String expected = 'DISTANCE(BillingAddress, LocationField__c, \'mi\') < 20';
+		System.assertEquals(expected, segment, 'Segment should output a distance condition.');
+	}
+
+	@isTest
+	static void testDistanceGreaterThan() {
+		String segment = new QDistance('BillingAddress').to('LocationField__c').inKilometers().isGreaterThan(20).build();
+		String expected = 'DISTANCE(BillingAddress, LocationField__c, \'km\') > 20';
+		System.assertEquals(expected, segment, 'Segment should output a distance condition.');
+	}
+
+	@isTest
+	static void testDistanceInMiles() {
+		String segment = new QDistance('BillingAddress').to('LocationField__c').inMiles().isGreaterThan(20).build();
+		string expected = 'DISTANCE(BillingAddress, LocationField__c, \'mi\') > 20';
+		System.assertEquals(expected, segment, 'Segment should output a distance condition.');
+	}
+
+	@isTest
+	static void testDistanceInvalidOperator() {
+		String expected = '';
+		try {
+			String segment = new QDistance('BillingAddress').to('LocationField__c').equalsTo(20).build();
+		} catch (QDistance.QDistanceException e) {
+			expected = e.getMessage();
+		}
+		System.assertEquals(expected, 'Invalid operator. DISTANCE supports only the logical operators > and <', 'Should output an exception message.');
+	}
+
+	@isTest
+	static void testDistanceToLocationNotSet() {
+		String expected = '';
+		try {
+			String segment = new QDistance('BillingAddress').isLessThan(20).build();
+		} catch (QDistance.QDistanceException e) {
+			expected = e.getMessage();
+		}
+		System.assertEquals(expected, 'To location is not set. Call to() method to set up.', 'Should output an exception message.');
+	}
+
+	@isTest
+	static void testDistanceLatLon() {
+		String segment = new QDistance('BillingAddress').to(37.775, -122.418).isLessThan(20).build();
+		String expected = 'DISTANCE(BillingAddress, GEOLOCATION(37.775, -122.418), \'mi\') < 20';
+		System.assertEquals(expected, segment, 'Segment should output a distance condition.');
+	}
+
 }

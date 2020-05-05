@@ -34,6 +34,14 @@ public class Q {
 	}
 
 	/**
+	 * Instantiate a Distance object using location fields
+	 */
+	public static QDistance distanceFrom(String fromFieldName) {
+		QDistance dist = new QDistance(fromFieldName);
+		return dist;
+	}
+
+	/**
 	 * Add an OrderBy statement
 	 */
 	public Q add(QOrder ob) {
