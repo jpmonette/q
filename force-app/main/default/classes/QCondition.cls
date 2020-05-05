@@ -39,6 +39,8 @@ public class QCondition implements QICondition {
 		} else if (val instanceof Date) {
 			String dateString = String.valueOf(val);
 			return dateString.substring(0, dateString.indexOf(' '));
+		} else if (val instanceof Q) {
+			return ((Q)val).build();
 		} else {
 			return val;
 		}
@@ -92,11 +94,23 @@ public class QCondition implements QICondition {
 		return this;
 	}
 
+	public QCondition isIn(Q subQuery) {
+		this.operatorValue = ComparisonOperator.IS_IN;
+		this.fieldValue = subQuery;
+		return this;
+	}
+
 	public QCondition isNotIn(List<Object> values) {
 		this.operatorValue = ComparisonOperator.NOT_IN;
 		this.fieldValue = values;
 		return this;
 	}
+
+	public QCondition isNotIn(Q subQuery) {
+		this.operatorValue = ComparisonOperator.NOT_IN;
+		this.fieldValue = subQuery;
+		return this;
+	}	
 
 	public QCondition includes(List<Object> values) {
 		this.operatorValue = ComparisonOperator.INCLUDES;

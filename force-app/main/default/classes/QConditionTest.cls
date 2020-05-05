@@ -94,4 +94,18 @@ private class QConditionTest {
 		System.assertEquals('Name != null', segment, 'It should output a IS NOT NULL condition.');
 	}
 
+	@isTest
+	static void testIsInSubQuery() {
+		String segment = new QCondition('Name').isIn(new Q(Account.SObjectType).selectFields(new Set<String> {'Name'})).build();
+		String expected = 'Name IN (SELECT Name FROM Account)';
+		System.assertEquals(expected, segment, 'It should output a IN sub query.');
+	}
+
+	@isTest
+	static void testIsNotInSubQuery() {
+		String segment = new QCondition('Name').isNotIn(new Q(Account.SObjectType).selectFields(new Set<String> {'Name'})).build();
+		String expected = 'Name NOT IN (SELECT Name FROM Account)';
+		System.assertEquals(expected, segment, 'It should output a NOT IN sub query.');
+	}
+
 }
