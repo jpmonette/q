@@ -34,6 +34,14 @@ public class Q {
 	}
 
 	/**
+	 * Instantiate a BindVariable object
+	 */
+	public static QBindVariable bindVar(String bindVarName) {
+		QBindVariable bindVar = new QBindVariable(bindVarName);
+		return bindVar;
+	}
+	
+	/**
 	 * Add an OrderBy statement
 	 */
 	public Q add(QOrder ob) {
@@ -94,20 +102,20 @@ public class Q {
 	}
 
 	/**
-     * Instantiate a parenthetical OR condition group
-     */
-    public static QConditionGroup orGroup() {
-        QOrGroup orGroup = new QOrGroup();
-        return orGroup;
-    }
+	 * Instantiate a parenthetical OR condition group
+	 */
+	public static QConditionGroup orGroup() {
+		QOrGroup orGroup = new QOrGroup();
+		return orGroup;
+	}
 
-    /**
-     * Instantiate a parenthetical AND condition group
-     */
-    public static QConditionGroup andGroup() {
-        QAndGroup andGroup = new QAndGroup();
-        return andGroup;
-    }
+	/**
+	 * Instantiate a parenthetical AND condition group
+	 */
+	public static QConditionGroup andGroup() {
+		QAndGroup andGroup = new QAndGroup();
+		return andGroup;
+	}
 
 	/**
 	 * Build the SELECT statement

@@ -19,6 +19,14 @@ private class QConditionTest {
 	}
 
 	@isTest
+	static void testEqualsIntegerBindVar() {
+		Integer ageVar = 5;
+		String segment = new QCondition('Age').equalsTo(Q.bindVar(':ageVar')).build();
+		String expected = 'Age = :ageVar';
+		System.assertEquals(expected, segment, 'It should output an = condition with bind variable');
+	}
+
+	@isTest
 	static void testNotEquals() {
 		String segment = new QCondition('Name').notEqualsTo('Jean-Philippe Monette').build();
 		System.assertEquals('Name != \'Jean-Philippe Monette\'', segment, 'It should output a not equal condition.');
@@ -62,6 +70,14 @@ private class QConditionTest {
 	}
 
 	@isTest
+	static void testIsInBindVar() {
+		List<String> names = new List<String>{'John', 'Jane'};
+		String segment = new QCondition('Name').isIn(Q.bindVar(':names')).build();
+		String expected = 'Name IN :names';
+		System.assertEquals(expected, segment, 'It should output an IN condition with bind variable');
+	}
+
+	@isTest
 	static void testIsNotIn() {
 		List<String> names = new List<String>{'John', 'Jane'};
 		String segment = new QCondition('Name').isNotIn(names).build();
@@ -69,10 +85,26 @@ private class QConditionTest {
 	}
 
 	@isTest
+	static void testIsNotInBindVar() {
+		List<String> names = new List<String>{'John', 'Jane'};
+		String segment = new QCondition('Name').isNotIn(Q.bindVar(':names')).build();
+		String expected = 'Name NOT IN :names';
+		System.assertEquals(expected, segment, 'It should output a NOT IN condition with bind variable');
+	}
+	
+	@isTest
 	static void testIncludes() {
 		List<String> markets = new List<String>{'APAC', 'EMEA'};
 		String segment = new QCondition('Market').includes(markets).build();
 		System.assertEquals('Market INCLUDES (\'APAC\', \'EMEA\')', segment, 'It should output an INCLUDES condition.');
+	}
+
+	@isTest
+	static void testIncludesBindVar() {
+		List<String> markets = new List<String>{'APAC', 'EMEA'};
+		String segment = new QCondition('Market').includes(q.bindVar(':markets')).build();
+		String expected = 'Market INCLUDES :markets';
+		System.assertEquals(expected, segment, 'It should output an INCLUDES condition with bind variable');
 	}
 
 	@isTest
@@ -82,6 +114,14 @@ private class QConditionTest {
 		System.assertEquals('Market EXCLUDES (\'APAC\', \'EMEA\')', segment, 'It should output a EXCLUDES condition.');
 	}
 
+	@isTest
+	static void testExcludesBindVar() {
+		List<String> markets = new List<String>{'APAC', 'EMEA'};
+		String segment = new QCondition('Market').excludes(q.bindVar(':markets')).build();
+		String expected = 'Market EXCLUDES :markets';
+		System.assertEquals(expected, segment, 'It should output an EXCLUDES condition with bind variable');
+	}
+	
 	@isTest
 	static void testIsNull() {
 		String segment = new QCondition('Name').isNull().build();

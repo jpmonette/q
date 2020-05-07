@@ -115,59 +115,89 @@ private class QTest {
 	}
 
 	@isTest
-    static void testOrGroup() {
-        String query =
-            new Q(Account.SObjectType)
-                .add(Q.orGroup()
-                	.add(Q.condition('Name').equalsTo('test'))
-                	.add(Q.condition('Name').equalsTo('test'))
-            	)
-            	.build();
+	static void testOrGroup() {
+		String query =
+			new Q(Account.SObjectType)
+				.add(Q.orGroup()
+					.add(Q.condition('Name').equalsTo('test'))
+					.add(Q.condition('Name').equalsTo('test'))
+				)
+				.build();
 
 		String expected = 'SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')';
-        System.assertEquals(expected, query, 'It should output a query with a condition group.');
-        Database.query(query);
+		System.assertEquals(expected, query, 'It should output a query with a condition group.');
+		Database.query(query);
 
-        List<QCondition> conditions = new List<QCondition>();
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        QOrGroup sbOrGroup = new QOrGroup(conditions);
-        query =
-            new Q(Account.SObjectType)
-                .add(sbOrGroup)
-                .build();
+		List<QCondition> conditions = new List<QCondition>();
+		conditions.add(Q.condition('Name').equalsTo('test'));
+		conditions.add(Q.condition('Name').equalsTo('test'));
+		QOrGroup sbOrGroup = new QOrGroup(conditions);
+		query =
+			new Q(Account.SObjectType)
+				.add(sbOrGroup)
+				.build();
 
 		String expected2 = 'SELECT Id FROM Account WHERE (Name = \'test\' OR Name = \'test\')';
-        System.assertEquals(expected2, query, 'It should output a query with a condition group.');
-        Database.query(query);
-    }
+		System.assertEquals(expected2, query, 'It should output a query with a condition group.');
+		Database.query(query);
+	}
 
-    @isTest
-    static void testAndGroup() {
-        String query =
-            new Q(Account.SObjectType)
-                .add(Q.andGroup()
-                    .add(Q.condition('Name').equalsTo('test'))
-                    .add(Q.condition('Name').equalsTo('test'))
-                )
-                .build();
+	@isTest
+	static void testAndGroup() {
+		String query =
+			new Q(Account.SObjectType)
+				.add(Q.andGroup()
+					.add(Q.condition('Name').equalsTo('test'))
+					.add(Q.condition('Name').equalsTo('test'))
+				)
+				.build();
 
 		String expected = 'SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')';
-        System.assertEquals(expected, query, 'It should output a query with a condition group.');
-        Database.query(query);
+		System.assertEquals(expected, query, 'It should output a query with a condition group.');
+		Database.query(query);
 
-        List<QCondition> conditions = new List<QCondition>();
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        conditions.add(Q.condition('Name').equalsTo('test'));
-        QAndGroup sbAndGroup = new QAndGroup(conditions);
-        query =
-            new Q(Account.SObjectType)
-                .add(sbAndGroup)
-            .build();
+		List<QCondition> conditions = new List<QCondition>();
+		conditions.add(Q.condition('Name').equalsTo('test'));
+		conditions.add(Q.condition('Name').equalsTo('test'));
+		QAndGroup sbAndGroup = new QAndGroup(conditions);
+		query =
+			new Q(Account.SObjectType)
+				.add(sbAndGroup)
+			.build();
 
 		String expected2 = 'SELECT Id FROM Account WHERE (Name = \'test\' AND Name = \'test\')';
-        System.assertEquals(expected2, query, 'It should output a query with a condition group.');
-        Database.query(query);
-    }
+		System.assertEquals(expected2, query, 'It should output a query with a condition group.');
+		Database.query(query);
+	}
+	
+	@isTest
+	static void testBindVariable() {
+		List<String> listOfNames = new List<String> {'Acme', 'Acme 2'};
+		String query =		
+			new Q(Account.SObjectType)
+				.add(Q.condition('Name').isIn(Q.bindVar(':listOfNames')))
+				.build();
+
+		String expected = 'SELECT Id FROM Account WHERE Name IN :listOfNames';
+		System.assertEquals(expected, query, 'It should output a query with a bind variable.');
+		Database.query(query);
+	}
+	
+	@isTest
+	static void testBindVariableException() {
+		List<String> listOfNames = new List<String> {'Acme', 'Acme 2'};
+		String bindException = '';
+		try {
+			String query =		
+			new Q(Account.SObjectType)
+				.add(Q.condition('Name').isIn(Q.bindVar('listOfNames')))
+				.build();
+		} catch (QBindVariable.QBindVariableException e) {
+			bindException = e.getMessage();
+		}
+		
+		String expected = 'Invalid bind variable. Must begin with colon - :var';
+		System.assertEquals(expected, bindException, 'It should throw a bind variable exception.');		
+	}
 
 }
