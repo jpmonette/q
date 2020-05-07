@@ -86,25 +86,25 @@ public class QCondition implements QICondition {
 		return this;
 	}
 
-	public QCondition isIn(List<Object> values) {
+	public QCondition isIn(Object values) {
 		this.operatorValue = ComparisonOperator.IS_IN;
 		this.fieldValue = values;
 		return this;
 	}
 
-	public QCondition isNotIn(List<Object> values) {
+	public QCondition isNotIn(Object values) {
 		this.operatorValue = ComparisonOperator.NOT_IN;
 		this.fieldValue = values;
 		return this;
 	}
 
-	public QCondition includes(List<Object> values) {
+	public QCondition includes(Object values) {
 		this.operatorValue = ComparisonOperator.INCLUDES;
 		this.fieldValue = values;
 		return this;
 	}
 
-	public QCondition excludes(List<Object> values) {
+	public QCondition excludes(Object values) {
 		this.operatorValue = ComparisonOperator.EXCLUDES;
 		this.fieldValue = values;
 		return this;
@@ -146,15 +146,27 @@ public class QCondition implements QICondition {
 				return field + ' LIKE ' + fieldValue;
 			}
 			when IS_IN {
+				if (fieldValue instanceof QBindVariable) {
+					return field + ' IN ' + fieldValue;
+				}
 				return field + ' IN (' + fieldValue + ')';
 			}
 			when NOT_IN {
+				if (fieldValue instanceof QBindVariable) {
+					return field + ' NOT IN ' + fieldValue;
+				}
 				return field + ' NOT IN (' + fieldValue + ')';
 			}
 			when INCLUDES {
+				if (fieldValue instanceof QBindVariable) {
+					return field + ' INCLUDES ' + fieldValue;
+				}
 				return field + ' INCLUDES (' + fieldValue + ')';
 			}
 			when EXCLUDES {
+				if (fieldValue instanceof QBindVariable) {
+					return field + ' EXCLUDES ' + fieldValue;
+				}
 				return field + ' EXCLUDES (' + fieldValue + ')';
 			}
 			when else {
